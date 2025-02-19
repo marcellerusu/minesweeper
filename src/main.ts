@@ -193,7 +193,23 @@ function number() {
   c.classList.add("c");
   let d = document.createElement("div");
   d.classList.add("d");
-  num.append(a, b, c, d);
+  let e = document.createElement("div");
+  e.classList.add("e");
+  let f = document.createElement("div");
+  f.classList.add("f");
+  let g = document.createElement("div");
+  g.classList.add("g");
+  let h = document.createElement("div");
+  h.classList.add("h");
+  let i = document.createElement("div");
+  i.classList.add("i");
+  let j = document.createElement("div");
+  j.classList.add("j");
+  let k = document.createElement("div");
+  k.classList.add("k");
+  let l = document.createElement("div");
+  l.classList.add("l");
+  num.append(a, b, c, d, e, f, g, h, i, j, k, l);
   return num;
 }
 

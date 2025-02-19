@@ -82,6 +82,97 @@ span {
       margin-left: -12px;
     }
   }
+
+  &[data-mine-count="2"] .number {
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    --color: #005200;
+    .a {
+      position: absolute;
+      width: 15px;
+      background-color: var(--color);
+      height: 5px;
+      margin-top: 15px;
+    }
+    .b {
+      position: absolute;
+      width: 5px;
+      background-color: var(--color);
+      height: 5px;
+      margin-top: 11px;
+      margin-left: -10px;
+    }
+    .c {
+      position: absolute;
+      width: 14px;
+      background-color: var(--color);
+      height: 5px;
+      margin-top: 2.5px;
+      margin-left: 0px;
+      transform: rotate(150deg);
+      z-index: 1;
+    }
+    .d {
+      position: absolute;
+      width: 5px;
+      background-color: var(--color);
+      height: 5px;
+      margin-top: -5px;
+      margin-left: 10px;
+    }
+    .e {
+      position: absolute;
+      width: 8px;
+      background-color: var(--color);
+      height: 5px;
+      margin-top: -12px;
+      margin-left: 0px;
+    }
+    .f {
+      position: absolute;
+      width: 5px;
+      background-color: var(--color);
+      height: 5px;
+      margin-top: -10px;
+      margin-left: 8px;
+      transform: rotate(45deg);
+    }
+    .g {
+      position: absolute;
+      width: 5px;
+      background-color: var(--color);
+      height: 7px;
+      margin-top: -8px;
+      margin-left: -9px;
+      transform: rotate(45deg);
+    }
+    .h {
+      position: absolute;
+      width: 5px;
+      background-color: var(--color);
+      height: 5px;
+      margin-left: -10px;
+      margin-top: -4px;
+    }
+    .i {
+      position: absolute;
+      width: 5px;
+      background-color: grey;
+      height: 5px;
+      margin-left: -20px;
+      margin-top: -5px;
+    }
+    .j {
+      position: absolute;
+      width: 5px;
+      background-color: grey;
+      height: 2px;
+      margin-left: -10px;
+      margin-top: -0px;
+    }
+  }
 }
 
 .cell[data-is-open="true"][data-is-mine="true"] {
