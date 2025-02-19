@@ -30,6 +30,19 @@ span {
   border: 4px outset black;
 }
 
+.cell[data-is-open="false"] {
+  &:hover {
+    cursor: pointer;
+    border-color: #aaa;
+    background-color: #888;
+  }
+  &:active {
+    cursor: pointer;
+    border-color: #555;
+    background-color: #777;
+  }
+}
+
 .cell[data-is-open="true"][data-is-mine="false"] {
   border: 2px solid #555;
   padding: 2px;

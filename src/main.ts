@@ -209,6 +209,8 @@ function create_board_html(game: Game) {
       cell.dataset.isMine = is_mine.toString();
       cell.dataset.isOpen = game.is_open(x, y).toString();
       cell.dataset.mineCount = game.number_of_mines_near(x, y).toString();
+      cell.dataset.x = x.toString();
+      cell.dataset.y = y.toString();
       if (is_mine) cell.append(mine());
       else cell.append(number());
       row.append(cell);
@@ -218,13 +220,23 @@ function create_board_html(game: Game) {
   return board;
 }
 
-let game = new Game();
+let game = new Game(10, 10, 10);
 
-// game.load_mines();
-game.load_mine_unsafe(3, 3);
+game.load_mines();
+// game.load_mine_unsafe(3, 3);
 
-try {
-  game.run_click_at(1, 3);
-} catch {}
+// try {
+//   game.run_click_at(1, 3);
+// } catch {}
 
-document.querySelector("#app")?.append(create_board_html(game));
+let board = create_board_html(game);
+document.querySelector("#app")?.append(board);
+
+board.addEventListener("click", (e) => {
+  let cell = (e.target as HTMLElement).closest(".cell") as HTMLDivElement;
+  try {
+    game.run_click_at(Number(cell.dataset.x), Number(cell.dataset.y));
+  } catch {}
+  // TODO: don't replace
+  board.innerHTML = create_board_html(game).innerHTML;
+});
