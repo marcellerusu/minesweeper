@@ -52,6 +52,29 @@ class Game {
     return str.trim();
   }
 
+  number_of_mines_near(x: number, y: number): number {
+    let count = 0;
+
+    // is there a mine above?
+    if (this.#board[y - 1]?.[x]?.is_mine) count++;
+    // is there a mine below?
+    if (this.#board[y + 1]?.[x]?.is_mine) count++;
+    // is there a mine to the left?
+    if (this.#board[y]?.[x - 1]?.is_mine) count++;
+    // is there a mine to the right?
+    if (this.#board[y]?.[x + 1]?.is_mine) count++;
+    // is there a mine to the top left?
+    if (this.#board[y - 1]?.[x - 1]?.is_mine) count++;
+    // is there a mine to the top right?
+    if (this.#board[y - 1]?.[x + 1]?.is_mine) count++;
+    // is there a mine to the bottom left?
+    if (this.#board[y + 1]?.[x - 1]?.is_mine) count++;
+    // is there a mine to the bottom right?
+    if (this.#board[y + 1]?.[x + 1]?.is_mine) count++;
+
+    return count;
+  }
+
   #try_click_at(
     x: number,
     y: number
@@ -158,6 +181,21 @@ function mine() {
   return mine;
 }
 
+function number() {
+  let num = document.createElement("div");
+  num.classList.add("number");
+  let a = document.createElement("div");
+  a.classList.add("a");
+  let b = document.createElement("div");
+  b.classList.add("b");
+  let c = document.createElement("div");
+  c.classList.add("c");
+  let d = document.createElement("div");
+  d.classList.add("d");
+  num.append(a, b, c, d);
+  return num;
+}
+
 function create_board_html(game: Game) {
   let board = document.createElement("div");
   board.classList.add("board");
@@ -169,7 +207,9 @@ function create_board_html(game: Game) {
       let is_mine = game.is_mine(x, y);
       cell.dataset.isMine = is_mine.toString();
       cell.dataset.isOpen = game.is_open(x, y).toString();
+      cell.dataset.mineCount = game.number_of_mines_near(x, y).toString();
       if (is_mine) cell.append(mine());
+      else cell.append(number());
       row.append(cell);
     }
     board.append(row);
@@ -180,7 +220,7 @@ function create_board_html(game: Game) {
 let game = new Game();
 
 // game.load_mines();
-game.load_mine_unsafe(1, 3);
+game.load_mine_unsafe(2, 3);
 
 game.open_unsafe(1, 3);
 

@@ -27,11 +27,53 @@ span {
   width: 30px;
   height: 30px;
   background-color: grey;
-  border: 4px inset black;
+  border: 4px outset black;
+}
+
+.cell[data-is-open="true"][data-is-mine="false"] {
+  border: 2px solid #555;
+  padding: 2px;
+  &[data-mine-count="1"] .number {
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    --color: #00a;
+    .a {
+      position: absolute;
+      width: 5px;
+      background-color: var(--color);
+      height: 20px;
+    }
+    .b {
+      position: absolute;
+      width: 15px;
+      background-color: var(--color);
+      height: 5px;
+      margin-top: 15px;
+    }
+    .c {
+      position: absolute;
+      width: 10px;
+      background-color: var(--color);
+      height: 5px;
+      margin-top: -9px;
+      margin-left: -5.5px;
+      transform: rotate(-60deg);
+    }
+    .d {
+      position: absolute;
+      background-color: grey;
+      width: 7px;
+      height: 5px;
+      margin-left: -12px;
+    }
+  }
 }
 
 .cell[data-is-open="true"][data-is-mine="true"] {
-  border: 4px inset #a00;
+  border: 2px solid #333;
+  padding: 2px;
   background-color: #a00;
   .mine {
     height: 100%;
