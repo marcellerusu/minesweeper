@@ -180,12 +180,14 @@ span {
     justify-content: center;
     align-items: center;
     --color: #a00;
+    /* middle line */
     .a {
       position: absolute;
       width: 10px;
       background-color: var(--color);
       height: 5px;
     }
+    /* bottom line */
     .b {
       position: absolute;
       width: 14px;
@@ -194,6 +196,7 @@ span {
       margin-top: 17px;
       margin-left: -5px;
     }
+    /* top line */
     .c {
       position: absolute;
       width: 14px;
@@ -233,7 +236,7 @@ span {
       width: 5px;
       background-color: var(--color);
       height: 5px;
-      margin-top: 9px;
+      margin-top: 8px;
       margin-left: 11px;
     }
     .h {
