@@ -19,11 +19,25 @@ class Game {
     }
   }
 
+  is_mine(x: number, y: number): boolean {
+    return this.#board[y][x].is_mine;
+  }
+
+  is_open(x: number, y: number): boolean {
+    return this.#board[y][x].is_open;
+  }
+
   // just for testing
   load_mine_unsafe(x: number, y: number) {
     if (x < 0 || x >= this.WIDTH || y < 0 || y >= this.HEIGHT)
       throw "out of bounds";
     this.#board[y][x].is_mine = true;
+  }
+
+  open_unsafe(x: number, y: number) {
+    if (x < 0 || x >= this.WIDTH || y < 0 || y >= this.HEIGHT)
+      throw "out of bounds";
+    this.#board[y][x].is_open = true;
   }
 
   serialize() {
@@ -118,14 +132,56 @@ class Game {
   }
 }
 
+function mine() {
+  let mine = document.createElement("div");
+  mine.classList.add("mine");
+  let horizontal = document.createElement("div");
+  horizontal.classList.add("horizontal");
+  let vertical = document.createElement("div");
+  vertical.classList.add("vertical");
+  let horizontal_diagonal = document.createElement("div");
+  horizontal_diagonal.classList.add("horizontal-diagonal");
+  let vertical_diagonal = document.createElement("div");
+  vertical_diagonal.classList.add("vertical-diagonal");
+  let ball = document.createElement("div");
+  ball.classList.add("ball");
+  let white = document.createElement("div");
+  white.classList.add("white");
+  mine.append(
+    horizontal,
+    vertical,
+    horizontal_diagonal,
+    vertical_diagonal,
+    ball,
+    white
+  );
+  return mine;
+}
+
+function create_board_html(game: Game) {
+  let board = document.createElement("div");
+  board.classList.add("board");
+  for (let y = 0; y < game.HEIGHT; y++) {
+    let row = document.createElement("span");
+    for (let x = 0; x < game.WIDTH; x++) {
+      let cell = document.createElement("div");
+      cell.classList.add("cell");
+      let is_mine = game.is_mine(x, y);
+      cell.dataset.isMine = is_mine.toString();
+      cell.dataset.isOpen = game.is_open(x, y).toString();
+      if (is_mine) cell.append(mine());
+      row.append(cell);
+    }
+    board.append(row);
+  }
+  return board;
+}
+
 let game = new Game();
 
-game.load_mines();
+// game.load_mines();
+game.load_mine_unsafe(1, 3);
 
-console.log("first!\n%s", game.serialize());
+game.open_unsafe(1, 3);
 
-game.run_click_at(1, 3);
-
-console.log("\nsecond!\n%s", game.serialize());
-
-console.log("\nfinished?", game.is_game_over());
+document.querySelector("#app")?.append(create_board_html(game));
