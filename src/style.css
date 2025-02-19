@@ -173,6 +173,88 @@ span {
       margin-top: -1px;
     }
   }
+
+  &[data-mine-count="3"] .number {
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    --color: #a00;
+    .a {
+      position: absolute;
+      width: 10px;
+      background-color: var(--color);
+      height: 5px;
+    }
+    .b {
+      position: absolute;
+      width: 14px;
+      background-color: var(--color);
+      height: 5px;
+      margin-top: 17px;
+      margin-left: -5px;
+    }
+    .c {
+      position: absolute;
+      width: 14px;
+      background-color: var(--color);
+      height: 5px;
+      margin-top: -17px;
+      margin-left: -5px;
+    }
+    .d {
+      position: absolute;
+      width: 5px;
+      background-color: var(--color);
+      height: 5px;
+      margin-top: -8px;
+      margin-left: 11px;
+    }
+    .e {
+      position: absolute;
+      width: 6px;
+      background-color: var(--color);
+      height: 5px;
+      margin-top: -14px;
+      margin-left: 9px;
+      transform: rotate(53deg);
+    }
+    .f {
+      position: absolute;
+      width: 6px;
+      background-color: var(--color);
+      height: 5px;
+      margin-top: -2px;
+      margin-left: 9px;
+      transform: rotate(calc(180deg - 53deg));
+    }
+    .g {
+      position: absolute;
+      width: 5px;
+      background-color: var(--color);
+      height: 5px;
+      margin-top: 9px;
+      margin-left: 11px;
+    }
+    .h {
+      position: absolute;
+      width: 6px;
+      background-color: var(--color);
+      height: 5px;
+      margin-top: 14px;
+      margin-left: 9px;
+      transform: rotate(calc(180deg - 53deg));
+    }
+    .i {
+      position: absolute;
+      width: 6px;
+      background-color: var(--color);
+      height: 5px;
+      margin-top: 2px;
+      margin-left: 9px;
+      transform: rotate(53deg);
+    }
+  }
 }
 
 .cell[data-is-open="true"][data-is-mine="true"] {

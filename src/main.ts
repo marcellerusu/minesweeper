@@ -222,13 +222,14 @@ function create_board_html(game: Game) {
       let cell = document.createElement("div");
       cell.classList.add("cell");
       let is_mine = game.is_mine(x, y);
+      let mine_count = game.number_of_mines_near(x, y);
       cell.dataset.isMine = is_mine.toString();
       cell.dataset.isOpen = game.is_open(x, y).toString();
-      cell.dataset.mineCount = game.number_of_mines_near(x, y).toString();
+      cell.dataset.mineCount = mine_count.toString();
       cell.dataset.x = x.toString();
       cell.dataset.y = y.toString();
       if (is_mine) cell.append(mine());
-      else cell.append(number());
+      else if (mine_count !== 0) cell.append(number());
       row.append(cell);
     }
     board.append(row);
@@ -245,7 +246,7 @@ function update_board_html(game: Game, board: HTMLDivElement) {
   }
 }
 
-let game = new Game(10, 10, 10);
+let game = new Game(10, 10, 20);
 
 game.load_mines();
 
