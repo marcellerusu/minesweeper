@@ -49,10 +49,9 @@ class Game {
   }
 
   open_unless_flagged(x: number, y: number) {
-    if (x < 0 || x >= this.WIDTH || y < 0 || y >= this.HEIGHT)
-      throw "out of bounds";
+    if (x < 0 || x >= this.WIDTH || y < 0 || y >= this.HEIGHT) return;
     if (this.#board[y][x].is_flagged) return;
-    this.#board[y][x].is_open = true;
+    this.run_click_at(x, y);
   }
 
   serialize() {
