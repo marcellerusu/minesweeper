@@ -118,8 +118,8 @@ span {
       position: absolute;
       width: 5px;
       background-color: var(--color);
-      height: 5px;
-      margin-top: -5px;
+      height: 7.5px;
+      margin-top: -8px;
       margin-left: 10px;
     }
     .e {
@@ -127,7 +127,7 @@ span {
       width: 8px;
       background-color: var(--color);
       height: 5px;
-      margin-top: -12px;
+      margin-top: -16.7px;
       margin-left: 0px;
     }
     .f {
@@ -135,7 +135,7 @@ span {
       width: 5px;
       background-color: var(--color);
       height: 5px;
-      margin-top: -10px;
+      margin-top: -15px;
       margin-left: 8px;
       transform: rotate(45deg);
     }
@@ -144,7 +144,7 @@ span {
       width: 5px;
       background-color: var(--color);
       height: 7px;
-      margin-top: -8px;
+      margin-top: -13px;
       margin-left: -9px;
       transform: rotate(45deg);
     }
@@ -154,7 +154,7 @@ span {
       background-color: var(--color);
       height: 5px;
       margin-left: -10px;
-      margin-top: -4px;
+      margin-top: -8px;
     }
     .i {
       position: absolute;
@@ -162,7 +162,7 @@ span {
       background-color: grey;
       height: 5px;
       margin-left: -20px;
-      margin-top: -5px;
+      margin-top: -10px;
     }
     .j {
       position: absolute;
@@ -170,7 +170,7 @@ span {
       background-color: grey;
       height: 2px;
       margin-left: -10px;
-      margin-top: -0px;
+      margin-top: -1px;
     }
   }
 }
