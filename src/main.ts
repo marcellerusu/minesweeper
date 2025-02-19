@@ -346,7 +346,7 @@ let game = new Game(10, 10, 10);
 game.load_mines();
 
 let board = create_board_html(game);
-document.querySelector("#app")?.append(board);
+document.querySelector("#app")!.append(board);
 
 board.addEventListener("click", (e) => {
   let cell = (e.target as HTMLElement).closest(".cell") as HTMLDivElement;
