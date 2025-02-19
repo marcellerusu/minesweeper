@@ -116,6 +116,7 @@ class Game {
       case "already_open":
         return;
       case "clicked_on_mine":
+        this.#board[y][x].is_open = true;
         throw "game over";
       case "open":
         this.#board[y][x].is_open = true;
@@ -220,8 +221,10 @@ function create_board_html(game: Game) {
 let game = new Game();
 
 // game.load_mines();
-game.load_mine_unsafe(2, 3);
+game.load_mine_unsafe(3, 3);
 
-game.open_unsafe(1, 3);
+try {
+  game.run_click_at(1, 3);
+} catch {}
 
 document.querySelector("#app")?.append(create_board_html(game));
