@@ -33,13 +33,13 @@ span {
 .cell[data-is-open="false"] {
   &:hover {
     cursor: pointer;
-    border-color: #aaa;
-    background-color: #888;
+    filter: contrast(0.8);
+    /* border-color: #aaa;
+    background-color: #888; */
   }
   &:active {
     cursor: pointer;
-    border-color: #555;
-    background-color: #777;
+    filter: contrast(1.5);
   }
 }
 
@@ -359,5 +359,79 @@ span {
       margin-left: -4px;
       margin-top: -4px;
     }
+  }
+}
+
+.cell[data-is-flagged="true"] .flag {
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  .a {
+    position: absolute;
+    z-index: 2;
+    background-color: #a00;
+    width: 10px;
+    height: 10px;
+    margin-top: -10px;
+    margin-left: -3px;
+  }
+  .b {
+    position: absolute;
+    background-color: grey;
+    width: 5px;
+    z-index: 2;
+    height: 10px;
+    margin-left: -7px;
+    margin-top: -20px;
+    transform: rotate(60deg);
+  }
+  .c {
+    position: absolute;
+    background-color: grey;
+    width: 5px;
+    z-index: 2;
+    height: 10px;
+    margin-left: -7px;
+    margin-top: 0px;
+    transform: rotate(calc(180deg - 60deg));
+  }
+  .d {
+    position: absolute;
+    background-color: black;
+    width: 2px;
+    height: 15px;
+    margin-top: -5px;
+    margin-left: 5px;
+    z-index: 2;
+  }
+  .e {
+    position: absolute;
+    background-color: black;
+    width: 10px;
+    height: 5px;
+    margin-left: 0px;
+    z-index: 1;
+    margin-top: 10px;
+  }
+  .f {
+    position: absolute;
+    background-color: grey;
+    width: 8px;
+    z-index: 1;
+    height: 13px;
+    margin-left: -6px;
+    margin-top: 3px;
+    transform: rotate(60deg);
+  }
+  .g {
+    position: absolute;
+    background-color: grey;
+    width: 8px;
+    z-index: 1;
+    height: 8px;
+    margin-left: 13px;
+    margin-top: 4px;
+    transform: rotate(-120deg);
   }
 }

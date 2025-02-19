@@ -274,8 +274,8 @@ function number() {
 }
 
 function flag() {
-  let num = document.createElement("div");
-  num.classList.add("flag");
+  let flag_elem = document.createElement("div");
+  flag_elem.classList.add("flag");
   let a = document.createElement("div");
   a.classList.add("a");
   let b = document.createElement("div");
@@ -300,8 +300,8 @@ function flag() {
   k.classList.add("k");
   let l = document.createElement("div");
   l.classList.add("l");
-  num.append(a, b, c, d, e, f, g, h, i, j, k, l);
-  return num;
+  flag_elem.append(a, b, c, d, e, f, g, h, i, j, k, l);
+  return flag_elem;
 }
 
 function create_board_html(game: Game) {
@@ -323,7 +323,7 @@ function create_board_html(game: Game) {
       cell.dataset.y = y.toString();
       if (is_mine) cell.append(mine());
       else if (mine_count !== 0) cell.append(number());
-      if (is_flagged) cell.append(flag());
+      cell.append(flag());
       row.append(cell);
     }
     board.append(row);
@@ -350,8 +350,11 @@ document.querySelector("#app")?.append(board);
 
 board.addEventListener("click", (e) => {
   let cell = (e.target as HTMLElement).closest(".cell") as HTMLDivElement;
+  let x = Number(cell.dataset.x),
+    y = Number(cell.dataset.y);
+  if (game.is_flagged(x, y)) return;
   try {
-    game.run_click_at(Number(cell.dataset.x), Number(cell.dataset.y));
+    game.run_click_at(x, y);
   } catch {}
   update_board_html(game, board);
 });
