@@ -1,10 +1,14 @@
 import "./style.css";
 
 class Game {
-  #board: { is_mine: boolean; is_open: boolean }[][];
+  #board: { is_mine: boolean; is_open: boolean; is_flagged: boolean }[][];
   constructor(readonly WIDTH = 4, readonly HEIGHT = 4, readonly MINES = 1) {
     this.#board = Array.from({ length: HEIGHT }, (_) =>
-      Array.from({ length: WIDTH }, (_) => ({ is_mine: false, is_open: false }))
+      Array.from({ length: WIDTH }, (_) => ({
+        is_mine: false,
+        is_open: false,
+        is_flagged: false,
+      }))
     );
   }
 
@@ -21,6 +25,10 @@ class Game {
 
   is_mine(x: number, y: number): boolean {
     return this.#board[y][x].is_mine;
+  }
+
+  is_flagged(x: number, y: number): boolean {
+    return this.#board[y][x].is_flagged;
   }
 
   is_open(x: number, y: number): boolean {
@@ -40,6 +48,13 @@ class Game {
     this.#board[y][x].is_open = true;
   }
 
+  open_unless_flagged(x: number, y: number) {
+    if (x < 0 || x >= this.WIDTH || y < 0 || y >= this.HEIGHT)
+      throw "out of bounds";
+    if (this.#board[y][x].is_flagged) return;
+    this.#board[y][x].is_open = true;
+  }
+
   serialize() {
     let str = "";
     for (let row of this.#board) {
@@ -50,6 +65,29 @@ class Game {
       str += "\n";
     }
     return str.trim();
+  }
+
+  number_of_flagged_near(x: number, y: number): number {
+    let count = 0;
+
+    // is there a flag above?
+    if (this.#board[y - 1]?.[x]?.is_flagged) count++;
+    // is there a flag below?
+    if (this.#board[y + 1]?.[x]?.is_flagged) count++;
+    // is there a flag to the left?
+    if (this.#board[y]?.[x - 1]?.is_flagged) count++;
+    // is there a flag to the right?
+    if (this.#board[y]?.[x + 1]?.is_flagged) count++;
+    // is there a flag to the top left?
+    if (this.#board[y - 1]?.[x - 1]?.is_flagged) count++;
+    // is there a flag to the top right?
+    if (this.#board[y - 1]?.[x + 1]?.is_flagged) count++;
+    // is there a flag to the bottom left?
+    if (this.#board[y + 1]?.[x - 1]?.is_flagged) count++;
+    // is there a flag to the bottom right?
+    if (this.#board[y + 1]?.[x + 1]?.is_flagged) count++;
+
+    return count;
   }
 
   number_of_mines_near(x: number, y: number): number {
@@ -73,6 +111,29 @@ class Game {
     if (this.#board[y + 1]?.[x + 1]?.is_mine) count++;
 
     return count;
+  }
+
+  toggle_flag(x: number, y: number) {
+    this.#board[y][x].is_flagged = !this.#board[y][x].is_flagged;
+  }
+
+  force_expand(x: number, y: number) {
+    // expand above
+    this.open_unless_flagged(x, y - 1);
+    // expand below
+    this.open_unless_flagged(x, y + 1);
+    // expand to the left
+    this.open_unless_flagged(x - 1, y);
+    // expand to the right
+    this.open_unless_flagged(x + 1, y);
+    // expand to the top left
+    this.open_unless_flagged(x - 1, y - 1);
+    // expand to the top right
+    this.open_unless_flagged(x + 1, y - 1);
+    // expand to the bottom left
+    this.open_unless_flagged(x - 1, y + 1);
+    // expand to the bottom right
+    this.open_unless_flagged(x + 1, y + 1);
   }
 
   #try_click_at(
@@ -213,6 +274,37 @@ function number() {
   return num;
 }
 
+function flag() {
+  let num = document.createElement("div");
+  num.classList.add("flag");
+  let a = document.createElement("div");
+  a.classList.add("a");
+  let b = document.createElement("div");
+  b.classList.add("b");
+  let c = document.createElement("div");
+  c.classList.add("c");
+  let d = document.createElement("div");
+  d.classList.add("d");
+  let e = document.createElement("div");
+  e.classList.add("e");
+  let f = document.createElement("div");
+  f.classList.add("f");
+  let g = document.createElement("div");
+  g.classList.add("g");
+  let h = document.createElement("div");
+  h.classList.add("h");
+  let i = document.createElement("div");
+  i.classList.add("i");
+  let j = document.createElement("div");
+  j.classList.add("j");
+  let k = document.createElement("div");
+  k.classList.add("k");
+  let l = document.createElement("div");
+  l.classList.add("l");
+  num.append(a, b, c, d, e, f, g, h, i, j, k, l);
+  return num;
+}
+
 function create_board_html(game: Game) {
   let board = document.createElement("div");
   board.classList.add("board");
@@ -223,13 +315,16 @@ function create_board_html(game: Game) {
       cell.classList.add("cell");
       let is_mine = game.is_mine(x, y);
       let mine_count = game.number_of_mines_near(x, y);
+      let is_flagged = game.is_flagged(x, y);
       cell.dataset.isMine = is_mine.toString();
       cell.dataset.isOpen = game.is_open(x, y).toString();
       cell.dataset.mineCount = mine_count.toString();
+      cell.dataset.isFlagged = is_flagged.toString();
       cell.dataset.x = x.toString();
       cell.dataset.y = y.toString();
       if (is_mine) cell.append(mine());
       else if (mine_count !== 0) cell.append(number());
+      if (is_flagged) cell.append(flag());
       row.append(cell);
     }
     board.append(row);
@@ -243,10 +338,11 @@ function update_board_html(game: Game, board: HTMLDivElement) {
   ) as NodeListOf<HTMLDivElement>) {
     let { x, y } = (cell as HTMLDivElement).dataset;
     cell.dataset.isOpen = game.is_open(Number(x), Number(y)).toString();
+    cell.dataset.isFlagged = game.is_flagged(Number(x), Number(y)).toString();
   }
 }
 
-let game = new Game(10, 10, 20);
+let game = new Game(10, 10, 10);
 
 game.load_mines();
 
@@ -259,4 +355,37 @@ board.addEventListener("click", (e) => {
     game.run_click_at(Number(cell.dataset.x), Number(cell.dataset.y));
   } catch {}
   update_board_html(game, board);
+});
+
+let mouse_x: number, mouse_y: number;
+
+window.addEventListener("mousemove", (e) => {
+  mouse_x = e.clientX;
+  mouse_y = e.clientY;
+});
+
+window.addEventListener("keydown", (e) => {
+  if (e.key === " ") {
+    e.preventDefault();
+    let cell: HTMLDivElement;
+    for (let elem of document.elementsFromPoint(mouse_x, mouse_y)) {
+      cell = elem.closest(".cell") as HTMLDivElement;
+      if (cell) break;
+    }
+    let { x: string_x, y: string_y, mineCount } = cell!.dataset;
+    let x = Number(string_x);
+    let y = Number(string_y);
+    // if cell is closed, mark as a flag
+    if (cell!.dataset.isOpen === "false") {
+      game.toggle_flag(x, y);
+    } else {
+      // if cell is open, and the number of flagged neighbors match the mine count
+      // try to open all neighboring cells
+      if (game.number_of_flagged_near(x, y) === Number(mineCount)) {
+        // TODO: handle opening a mine
+        game.force_expand(x, y);
+      }
+    }
+    update_board_html(game, board);
+  }
 });
