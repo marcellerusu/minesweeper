@@ -371,7 +371,101 @@ span {
       transform: rotate(calc(180deg - 35deg));
     }
   }
+  &[data-mine-count="6"] .number {
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    --color: #005252;
+    .a {
+      position: absolute;
+      width: 5px;
+      background-color: var(--color);
+      height: 15px;
+      margin-left: -10px;
+    }
+    .b {
+      position: absolute;
+      width: 10px;
+      background-color: var(--color);
+      height: 5px;
+      margin-left: 5px;
+      margin-top: -16px;
+    }
+    .c {
+      position: absolute;
+      width: 8px;
+      background-color: var(--color);
+      height: 5px;
+      margin-left: 2px;
+      margin-top: 16px;
+    }
+    .d {
+      position: absolute;
+      width: 5px;
+      background-color: var(--color);
+      height: 6px;
+      margin-left: 16px;
+      margin-top: 8px;
+    }
+    .e {
+      position: absolute;
+      width: 8px;
+      background-color: var(--color);
+      height: 5px;
+      margin-left: 2px;
+      margin-top: -0px;
+    }
+    .f {
+      position: absolute;
+      width: 5px;
+      background-color: var(--color);
+      height: 6px;
+      margin-left: -7px;
+      margin-top: -14px;
+      transform: rotate(60deg);
+    }
+    .g {
+      position: absolute;
+      width: 5px;
+      background-color: var(--color);
+      height: 6px;
+      margin-left: -7px;
+      margin-top: 13px;
+      transform: rotate(calc(180deg - 60deg));
+    }
+    .h {
+      position: absolute;
+      width: 5px;
+      background-color: var(--color);
+      height: 6px;
+      margin-left: 13px;
+      margin-top: 13px;
+      transform: rotate(60deg);
+    }
+    .i {
+      position: absolute;
+      width: 5px;
+      background-color: var(--color);
+      height: 6px;
+      margin-left: 13px;
+      margin-top: 3px;
+      transform: rotate(calc(180deg - 60deg));
+    }
+    .j {
+      position: absolute;
+      width: 5px;
+      background-color: var(--color);
+      height: 6px;
+      margin-left: -7px;
+      margin-top: 3px;
+      transform: rotate(60deg);
+    }
+  }
 }
+
+/* #005252 */
+
 .cell[data-is-open="true"][data-is-mine="true"] {
   border: 2px solid #333;
   padding: 2px;
