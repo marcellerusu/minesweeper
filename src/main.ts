@@ -220,14 +220,18 @@ function create_board_html(game: Game) {
   return board;
 }
 
+function update_board_html(game: Game, board: HTMLDivElement) {
+  for (let cell of board.querySelectorAll(
+    ".cell"
+  ) as NodeListOf<HTMLDivElement>) {
+    let { x, y } = (cell as HTMLDivElement).dataset;
+    cell.dataset.isOpen = game.is_open(Number(x), Number(y)).toString();
+  }
+}
+
 let game = new Game(10, 10, 10);
 
 game.load_mines();
-// game.load_mine_unsafe(3, 3);
-
-// try {
-//   game.run_click_at(1, 3);
-// } catch {}
 
 let board = create_board_html(game);
 document.querySelector("#app")?.append(board);
@@ -237,6 +241,5 @@ board.addEventListener("click", (e) => {
   try {
     game.run_click_at(Number(cell.dataset.x), Number(cell.dataset.y));
   } catch {}
-  // TODO: don't replace
-  board.innerHTML = create_board_html(game).innerHTML;
+  update_board_html(game, board);
 });
