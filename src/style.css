@@ -48,11 +48,14 @@ span {
   align-items: center;
 }
 .cell svg {
-  width: 80%;
-  height: 80%;
+  width: 90%;
+  height: 90%;
 }
 .cell[data-is-open="false"] svg {
   display: none;
+}
+* {
+  box-sizing: border-box;
 }
 
 .cell[data-is-open="true"][data-is-mine="false"] {
