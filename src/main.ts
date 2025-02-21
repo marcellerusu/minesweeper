@@ -250,6 +250,7 @@ const svg_numbers_and_icons = {
   4: `<polygon points="4.5,9 6.5,9 6.5,7 8,7 8,5 6.5,5 6.5,1 4.5,1 1,5 3.5,5 4.5,3.5 4.5,5 1,5 1,7 4.5,7" style="fill: #000052" />`,
   5: `<polygon points="2,9 7,9 8,8 8,5 7,4 4,4 4,3 8,3 8,1 2,1 2,5.75 6,5.75 6,7 2,7" style="fill: #520000" />`,
   6: `<polygon points="4,7 4,5.75 2,5 2,8 3,9 7,9 8,8 8,5 7,4 4,4 4,3 7.5,3 7.5,1 3,1 2,2 2,5.75 6,5.75 6,7 2,7" style="fill: #005252" />`,
+  7: `<polygon points="3,9 5,9 8,3.5 8,1 2,1 2,2.75 6,2.75 6,3.5" style="fill: #0f0f0f" />`,
   flag: `
     <polygon class="flag" points="2,9 8,9 8,8 6.5,7 6.5,1 5.5,1 5.5,7 2,8" style="fill: black" />
     <polygon class="flag" points="2,3 5.5,1 5.5,5" style="fill: #a00" />
