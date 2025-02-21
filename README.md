@@ -1,7 +1,5 @@
 # Minesweeper
 
-## About
-
 I really love minesweeper, and I wanted to make my favourite version
 
 Features include
