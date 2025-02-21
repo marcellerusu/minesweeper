@@ -35,35 +35,10 @@ class Game {
     return this.#board[y][x].is_open;
   }
 
-  // just for testing
-  load_mine_unsafe(x: number, y: number) {
-    if (x < 0 || x >= this.WIDTH || y < 0 || y >= this.HEIGHT)
-      throw "out of bounds";
-    this.#board[y][x].is_mine = true;
-  }
-
-  open_unsafe(x: number, y: number) {
-    if (x < 0 || x >= this.WIDTH || y < 0 || y >= this.HEIGHT)
-      throw "out of bounds";
-    this.#board[y][x].is_open = true;
-  }
-
   open_unless_flagged(x: number, y: number) {
     if (x < 0 || x >= this.WIDTH || y < 0 || y >= this.HEIGHT) return;
     if (this.#board[y][x].is_flagged) return;
     this.run_click_at(x, y);
-  }
-
-  serialize() {
-    let str = "";
-    for (let row of this.#board) {
-      for (let { is_mine, is_open } of row)
-        if (is_mine) str += "m ";
-        else if (!is_open) str += "- ";
-        else str += "_ ";
-      str += "\n";
-    }
-    return str.trim();
   }
 
   number_of_flagged_near(x: number, y: number): number {
@@ -207,12 +182,6 @@ class Game {
         this.run_click_at(x + 1, y + 1, { ignore_bounds: true });
         return;
     }
-  }
-
-  is_game_over() {
-    return this.#board.every((row) =>
-      row.every(({ is_mine, is_open }) => is_mine || is_open)
-    );
   }
 }
 
