@@ -292,7 +292,7 @@ function update_board_html(game: Game, board: HTMLDivElement) {
   for (let cell of board.querySelectorAll(
     ".cell"
   ) as NodeListOf<HTMLDivElement>) {
-    let { x, y } = (cell as HTMLDivElement).dataset;
+    let { x, y } = cell.dataset;
     cell.dataset.isOpen = game.is_open(Number(x), Number(y)).toString();
     cell.dataset.isFlagged = game.is_flagged(Number(x), Number(y)).toString();
   }
