@@ -274,43 +274,16 @@ function number() {
 }
 
 // viewbox = 0 0 10 10
-const svg_numbers = {
+const svg_numbers_and_icons = {
   1: `<polygon points="2,9 8,9 8,7 6,7 6,1 4,1 2,4 4,4 4,7 2,7" style="fill: #00a" />`,
   2: `<polygon points="2,9 8,9 8,7 5,7 8,5 8,2.5 6.5,1 3.5,1 2,2.5 2,4.5 4,4.5 4,3.5 4.5,3 5.5,3 6,3.5 6,4.5 2,7" style="fill: #005200" />`,
   3: `<polygon points="2,9 7,9 8,8 8,6 7,5 8,4 8,2 7,1 2,1 2,3 5.25,3 5.75,3.25 5.75,4 5.25,4.25 3,4.25 3,5.75 5.25,5.75 5.75,6 5.75,6.75 5.25,7 2,7" style="fill: #a00" />`,
   4: `<polygon points="4.5,9 6.5,9 6.5,7 8,7 8,5 6.5,5 6.5,1 4.5,1 1,5 3.5,5 4.5,3.5 4.5,5 1,5 1,7 4.5,7" style="fill: #000052" />`,
+  flag: `
+    <polygon class="flag" points="2,9 8,9 8,8 6.5,7 6.5,1 5.5,1 5.5,7 2,8" style="fill: black" />
+    <polygon class="flag" points="2,3 5.5,1 5.5,5" style="fill: #a00" />
+  `,
 } as Record<string, string>;
-
-function flag() {
-  let flag_elem = document.createElement("div");
-  flag_elem.classList.add("flag");
-  let a = document.createElement("div");
-  a.classList.add("a");
-  let b = document.createElement("div");
-  b.classList.add("b");
-  let c = document.createElement("div");
-  c.classList.add("c");
-  let d = document.createElement("div");
-  d.classList.add("d");
-  let e = document.createElement("div");
-  e.classList.add("e");
-  let f = document.createElement("div");
-  f.classList.add("f");
-  let g = document.createElement("div");
-  g.classList.add("g");
-  let h = document.createElement("div");
-  h.classList.add("h");
-  let i = document.createElement("div");
-  i.classList.add("i");
-  let j = document.createElement("div");
-  j.classList.add("j");
-  let k = document.createElement("div");
-  k.classList.add("k");
-  let l = document.createElement("div");
-  l.classList.add("l");
-  flag_elem.append(a, b, c, d, e, f, g, h, i, j, k, l);
-  return flag_elem;
-}
 
 function create_board_html(game: Game) {
   let board = document.createElement("div");
@@ -331,13 +304,13 @@ function create_board_html(game: Game) {
       cell.dataset.y = y.toString();
       if (is_mine) cell.append(mine());
       else if (mine_count !== 0) {
-        if (svg_numbers[mine_count]) {
-          cell.innerHTML += `<svg viewbox="0 0 10 10">${svg_numbers[mine_count]}</svg>`;
+        if (svg_numbers_and_icons[mine_count]) {
+          cell.innerHTML += `<svg viewbox="0 0 10 10">${svg_numbers_and_icons[mine_count]}</svg>`;
         } else {
           cell.append(number());
         }
       }
-      cell.append(flag());
+      cell.innerHTML += `<svg viewbox="0 0 10 10">${svg_numbers_and_icons.flag}</svg>`;
       row.append(cell);
     }
     board.append(row);
@@ -355,7 +328,7 @@ function update_board_html(game: Game, board: HTMLDivElement) {
   }
 }
 
-let game = new Game(30, 16, 99);
+let game = new Game(10, 10, 9);
 
 game.load_mines();
 
