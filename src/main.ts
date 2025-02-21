@@ -329,7 +329,7 @@ function update_board_html(game: Game, board: HTMLDivElement) {
   }
 }
 
-let game = new Game(10, 10, 50);
+let game = new Game(10, 10, 9);
 
 game.load_mines();
 
