@@ -84,9 +84,8 @@ class Game {
   }
 
   force_expand(x: number, y: number) {
-    for (let cell of this.neighbors_of(x, y)) {
+    for (let cell of this.neighbors_of(x, y))
       if (!cell.is_flagged) this.click(cell.x, cell.y);
-    }
   }
 
   click(x: number, y: number) {
