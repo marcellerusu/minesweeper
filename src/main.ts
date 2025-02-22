@@ -2,7 +2,11 @@ import "./style.css";
 
 class Game {
   #board: { is_mine: boolean; is_open: boolean; is_flagged: boolean }[][];
-  constructor(readonly WIDTH = 4, readonly HEIGHT = 4, readonly MINES = 1) {
+  constructor(
+    readonly WIDTH: number,
+    readonly HEIGHT: number,
+    readonly MINES: number
+  ) {
     this.#board = Array.from({ length: HEIGHT }, (_) =>
       Array.from({ length: WIDTH }, (_) => ({
         is_mine: false,
@@ -12,15 +16,21 @@ class Game {
     );
   }
 
-  load_mines() {
+  load_mines(opening_x: number, opening_y: number) {
     let number_of_mines_left = this.MINES;
     while (number_of_mines_left > 0) {
       let x = Math.floor(Math.random() * this.WIDTH);
       let y = Math.floor(Math.random() * this.HEIGHT);
+      if (x === opening_x && y === opening_y) continue;
       if (this.#board[y][x].is_mine) continue;
       this.#board[y][x].is_mine = true;
       number_of_mines_left--;
     }
+  }
+
+  is_empty() {
+    // no mines
+    return this.#board.every((row) => row.every((cell) => !cell.is_mine));
   }
 
   is_mine(x: number, y: number): boolean {
@@ -232,7 +242,7 @@ function svg_for(svg: string) {
   return `<svg viewbox="0 0 10 10">${svg}</svg>`;
 }
 
-function create_board_html(game: Game) {
+function init_board_html(game: Game) {
   let board = document.createElement("div");
   board.classList.add("board");
   board.style.setProperty("--width", game.WIDTH.toString());
@@ -242,25 +252,38 @@ function create_board_html(game: Game) {
     for (let x = 0; x < game.WIDTH; x++) {
       let cell = document.createElement("div");
       cell.classList.add("cell");
-      let is_mine = game.is_mine(x, y);
-      let mine_count = game.number_of_mines_near(x, y);
-      let is_flagged = game.is_flagged(x, y);
-      cell.dataset.isMine = is_mine.toString();
-      cell.dataset.isOpen = game.is_open(x, y).toString();
-      cell.dataset.mineCount = mine_count.toString();
-      cell.dataset.isFlagged = is_flagged.toString();
+      cell.dataset.isOpen = "false";
+      cell.dataset.isFlagged = "false";
       cell.dataset.x = x.toString();
       cell.dataset.y = y.toString();
-      if (is_mine) cell.innerHTML += svg_for(svg_numbers_and_icons.mine);
-      else if (mine_count !== 0)
-        cell.innerHTML += svg_for(svg_numbers_and_icons[mine_count]);
-
-      cell.innerHTML += svg_for(svg_numbers_and_icons.flag);
       row.append(cell);
     }
     board.append(row);
   }
   return board;
+}
+
+function load_mines_html(board: HTMLDivElement, game: Game) {
+  for (let cell of board.querySelectorAll(
+    ".cell"
+  ) as NodeListOf<HTMLDivElement>) {
+    let x = Number(cell.dataset.x),
+      y = Number(cell.dataset.y);
+    let is_mine = game.is_mine(x, y);
+    let mine_count = game.number_of_mines_near(x, y);
+    let is_flagged = game.is_flagged(x, y);
+    cell.dataset.isMine = is_mine.toString();
+    cell.dataset.isOpen = game.is_open(x, y).toString();
+    cell.dataset.mineCount = mine_count.toString();
+    cell.dataset.isFlagged = is_flagged.toString();
+    cell.dataset.x = x.toString();
+    cell.dataset.y = y.toString();
+    if (is_mine) cell.innerHTML += svg_for(svg_numbers_and_icons.mine);
+    else if (mine_count !== 0)
+      cell.innerHTML += svg_for(svg_numbers_and_icons[mine_count]);
+
+    cell.innerHTML += svg_for(svg_numbers_and_icons.flag);
+  }
 }
 
 function update_board_html(game: Game, board: HTMLDivElement) {
@@ -275,9 +298,7 @@ function update_board_html(game: Game, board: HTMLDivElement) {
 
 let game = new Game(10, 10, 9);
 
-game.load_mines();
-
-let board = create_board_html(game);
+let board = init_board_html(game);
 document.querySelector("#app")!.append(board);
 
 board.addEventListener("click", (e) => {
@@ -285,6 +306,11 @@ board.addEventListener("click", (e) => {
   let cell = (e.target as HTMLElement).closest(".cell") as HTMLDivElement;
   let x = Number(cell.dataset.x),
     y = Number(cell.dataset.y);
+
+  if (game.is_empty()) {
+    game.load_mines(x, y);
+    load_mines_html(board, game);
+  }
   if (game.is_flagged(x, y)) return;
   try {
     game.run_click_at(x, y);
@@ -313,6 +339,12 @@ window.addEventListener("keydown", (e) => {
     let { x: string_x, y: string_y, mineCount } = cell!.dataset;
     let x = Number(string_x);
     let y = Number(string_y);
+
+    if (game.is_empty()) {
+      game.load_mines(x, y);
+      load_mines_html(board, game);
+    }
+
     // if cell is closed, mark as a flag
     if (cell!.dataset.isOpen === "false") {
       game.toggle_flag(x, y);

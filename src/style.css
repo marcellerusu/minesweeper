@@ -16,6 +16,7 @@
   align-items: center;
   height: 100%;
   width: 100%;
+  --cell-size: 30px;
 }
 
 * {
@@ -27,8 +28,8 @@ span {
 }
 
 .cell {
-  width: 30px;
-  height: 30px;
+  width: var(--cell-size);
+  height: var(--cell-size);
   background-color: grey;
   border: 4px outset black;
 }
@@ -102,8 +103,8 @@ span {
     justify-content: center;
     align-items: center;
     background: rgba(185, 0, 0, 0.55);
-    width: calc(30px * var(--width));
-    height: calc(30px * var(--height));
+    width: calc(var(--cell-size) * var(--width));
+    height: calc(var(--cell-size) * var(--height));
     left: 50%;
     top: 50%;
     transform: translateX(-50%) translateY(-50%);
