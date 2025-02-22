@@ -45,16 +45,8 @@ class Game {
     return this.#board.every((row) => row.every((cell) => !cell.is_mine));
   }
 
-  is_mine(x: number, y: number): boolean {
-    return this.#board[y][x].is_mine;
-  }
-
-  is_flagged(x: number, y: number): boolean {
-    return this.#board[y][x].is_flagged;
-  }
-
-  is_open(x: number, y: number): boolean {
-    return this.#board[y][x].is_open;
+  at(x: number, y: number): Readonly<Cell> {
+    return this.#board[y][x];
   }
 
   open_unless_flagged(x: number, y: number) {
@@ -195,11 +187,10 @@ function load_mines_html(board: HTMLDivElement, game: Game) {
   ) as NodeListOf<HTMLDivElement>) {
     let x = Number(cell.dataset.x),
       y = Number(cell.dataset.y);
-    let is_mine = game.is_mine(x, y);
+    let { is_mine, is_flagged, is_open } = game.at(x, y);
     let mine_count = game.number_of_mines_near(x, y);
-    let is_flagged = game.is_flagged(x, y);
     cell.dataset.isMine = is_mine.toString();
-    cell.dataset.isOpen = game.is_open(x, y).toString();
+    cell.dataset.isOpen = is_open.toString();
     cell.dataset.mineCount = mine_count.toString();
     cell.dataset.isFlagged = is_flagged.toString();
     cell.dataset.x = x.toString();
@@ -217,8 +208,9 @@ function update_board_html(game: Game, board: HTMLDivElement) {
     ".cell"
   ) as NodeListOf<HTMLDivElement>) {
     let { x, y } = cell.dataset;
-    cell.dataset.isOpen = game.is_open(Number(x), Number(y)).toString();
-    cell.dataset.isFlagged = game.is_flagged(Number(x), Number(y)).toString();
+    let { is_open, is_flagged } = game.at(Number(x), Number(y));
+    cell.dataset.isOpen = is_open.toString();
+    cell.dataset.isFlagged = is_flagged.toString();
   }
 }
 
@@ -237,7 +229,7 @@ board.addEventListener("click", (e) => {
     game.load_mines(x, y);
     load_mines_html(board, game);
   }
-  if (game.is_flagged(x, y)) return;
+  if (game.at(x, y).is_flagged) return;
   game.click(x, y);
   update_board_html(game, board);
   if (game.is_game_over()) board.classList.add("game-over");
