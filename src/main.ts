@@ -185,32 +185,6 @@ class Game {
   }
 }
 
-function mine() {
-  let mine = document.createElement("div");
-  mine.classList.add("mine");
-  let horizontal = document.createElement("div");
-  horizontal.classList.add("horizontal");
-  let vertical = document.createElement("div");
-  vertical.classList.add("vertical");
-  let horizontal_diagonal = document.createElement("div");
-  horizontal_diagonal.classList.add("horizontal-diagonal");
-  let vertical_diagonal = document.createElement("div");
-  vertical_diagonal.classList.add("vertical-diagonal");
-  let ball = document.createElement("div");
-  ball.classList.add("ball");
-  let white = document.createElement("div");
-  white.classList.add("white");
-  mine.append(
-    horizontal,
-    vertical,
-    horizontal_diagonal,
-    vertical_diagonal,
-    ball,
-    white
-  );
-  return mine;
-}
-
 // viewbox = 0 0 10 10
 const svg_numbers_and_icons = {
   1: `<polygon points="2,9 8,9 8,7 6,7 6,1 4,1 2,4 4,4 4,7 2,7" style="fill: #00a" />`,
@@ -229,7 +203,18 @@ const svg_numbers_and_icons = {
     <polygon class="flag" points="2,9 8,9 8,8 6.5,7 6.5,1 5.5,1 5.5,7 2,8" style="fill: black" />
     <polygon class="flag" points="2,3 5.5,1 5.5,5" style="fill: #a00" />
   `,
-} as Record<string, string>;
+  mine: `
+    <line class="mine" x1="5" y1="1" x2="5" y2="9" stroke="black" stroke-linecap="round" stroke-width="2" />
+    <line class="mine" x1="1" y1="5" x2="9" y2="5" stroke="black" stroke-linecap="round" stroke-width="2" />
+
+    <line class="mine" x1="2.5" y1="7.5" x2="7.5" y2="2.5" stroke="#222" stroke-linecap="round" stroke-width="1.5" />
+    <line class="mine" x1="2.5" y1="2.5" x2="7.5" y2="7.5" stroke="#222" stroke-linecap="round" stroke-width="1.5" />
+
+    <circle class="mine" cx="5" cy="5" r="3.25" fill="black" />
+  
+    <rect x="3.5" y="3.5" width="1.5" height="1.5" rx="0.5" fill="white" />
+  `,
+} as Record<string | number, string>;
 
 function create_board_html(game: Game) {
   let board = document.createElement("div");
@@ -248,10 +233,11 @@ function create_board_html(game: Game) {
       cell.dataset.isFlagged = is_flagged.toString();
       cell.dataset.x = x.toString();
       cell.dataset.y = y.toString();
-      if (is_mine) cell.append(mine());
-      else if (mine_count !== 0) {
+      if (is_mine)
+        cell.innerHTML += `<svg viewbox="0 0 10 10">${svg_numbers_and_icons.mine}</svg>`;
+      else if (mine_count !== 0)
         cell.innerHTML += `<svg viewbox="0 0 10 10">${svg_numbers_and_icons[mine_count]}</svg>`;
-      }
+
       cell.innerHTML += `<svg viewbox="0 0 10 10">${svg_numbers_and_icons.flag}</svg>`;
       row.append(cell);
     }
