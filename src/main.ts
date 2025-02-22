@@ -1,17 +1,27 @@
 import "./style.css";
 
+type Cell = {
+  is_mine: boolean;
+  is_open: boolean;
+  is_flagged: boolean;
+  x: number;
+  y: number;
+};
+
 class Game {
-  #board: { is_mine: boolean; is_open: boolean; is_flagged: boolean }[][];
+  #board: Cell[][];
   constructor(
     readonly WIDTH: number,
     readonly HEIGHT: number,
     readonly MINES: number
   ) {
-    this.#board = Array.from({ length: HEIGHT }, (_) =>
-      Array.from({ length: WIDTH }, (_) => ({
+    this.#board = Array.from({ length: HEIGHT }, (_, y) =>
+      Array.from({ length: WIDTH }, (_, x) => ({
         is_mine: false,
         is_open: false,
         is_flagged: false,
+        x,
+        y,
       }))
     );
   }
@@ -49,53 +59,36 @@ class Game {
   open_unless_flagged(x: number, y: number) {
     if (x < 0 || x >= this.WIDTH || y < 0 || y >= this.HEIGHT) return;
     if (this.#board[y][x].is_flagged) return;
-    this.run_click_at(x, y);
+    this.click(x, y);
+  }
+
+  neighbors_of(x: number, y: number): Cell[] {
+    return [
+      // above
+      this.#board[y - 1]?.[x],
+      // below
+      this.#board[y + 1]?.[x],
+      // to the left
+      this.#board[y]?.[x - 1],
+      // to the right
+      this.#board[y]?.[x + 1],
+      // to the top left
+      this.#board[y - 1]?.[x - 1],
+      // to the top right
+      this.#board[y - 1]?.[x + 1],
+      // to the bottom left
+      this.#board[y + 1]?.[x - 1],
+      // to the bottom right
+      this.#board[y + 1]?.[x + 1],
+    ].filter((item) => typeof item !== "undefined");
   }
 
   number_of_flagged_near(x: number, y: number): number {
-    let count = 0;
-
-    // is there a flag above?
-    if (this.#board[y - 1]?.[x]?.is_flagged) count++;
-    // is there a flag below?
-    if (this.#board[y + 1]?.[x]?.is_flagged) count++;
-    // is there a flag to the left?
-    if (this.#board[y]?.[x - 1]?.is_flagged) count++;
-    // is there a flag to the right?
-    if (this.#board[y]?.[x + 1]?.is_flagged) count++;
-    // is there a flag to the top left?
-    if (this.#board[y - 1]?.[x - 1]?.is_flagged) count++;
-    // is there a flag to the top right?
-    if (this.#board[y - 1]?.[x + 1]?.is_flagged) count++;
-    // is there a flag to the bottom left?
-    if (this.#board[y + 1]?.[x - 1]?.is_flagged) count++;
-    // is there a flag to the bottom right?
-    if (this.#board[y + 1]?.[x + 1]?.is_flagged) count++;
-
-    return count;
+    return this.neighbors_of(x, y).filter((cell) => cell.is_flagged).length;
   }
 
   number_of_mines_near(x: number, y: number): number {
-    let count = 0;
-
-    // is there a mine above?
-    if (this.#board[y - 1]?.[x]?.is_mine) count++;
-    // is there a mine below?
-    if (this.#board[y + 1]?.[x]?.is_mine) count++;
-    // is there a mine to the left?
-    if (this.#board[y]?.[x - 1]?.is_mine) count++;
-    // is there a mine to the right?
-    if (this.#board[y]?.[x + 1]?.is_mine) count++;
-    // is there a mine to the top left?
-    if (this.#board[y - 1]?.[x - 1]?.is_mine) count++;
-    // is there a mine to the top right?
-    if (this.#board[y - 1]?.[x + 1]?.is_mine) count++;
-    // is there a mine to the bottom left?
-    if (this.#board[y + 1]?.[x - 1]?.is_mine) count++;
-    // is there a mine to the bottom right?
-    if (this.#board[y + 1]?.[x + 1]?.is_mine) count++;
-
-    return count;
+    return this.neighbors_of(x, y).filter((cell) => cell.is_mine).length;
   }
 
   toggle_flag(x: number, y: number) {
@@ -103,22 +96,8 @@ class Game {
   }
 
   force_expand(x: number, y: number) {
-    // expand above
-    this.open_unless_flagged(x, y - 1);
-    // expand below
-    this.open_unless_flagged(x, y + 1);
-    // expand to the left
-    this.open_unless_flagged(x - 1, y);
-    // expand to the right
-    this.open_unless_flagged(x + 1, y);
-    // expand to the top left
-    this.open_unless_flagged(x - 1, y - 1);
-    // expand to the top right
-    this.open_unless_flagged(x + 1, y - 1);
-    // expand to the bottom left
-    this.open_unless_flagged(x - 1, y + 1);
-    // expand to the bottom right
-    this.open_unless_flagged(x + 1, y + 1);
+    for (let cell of this.neighbors_of(x, y))
+      this.open_unless_flagged(cell.x, cell.y);
   }
 
   #try_click_at(
@@ -135,30 +114,15 @@ class Game {
     if (this.#board[y][x].is_mine) return "clicked_on_mine";
     if (this.#board[y][x].is_open) return "already_open";
 
-    // is there a mine above?
-    if (this.#board[y - 1]?.[x]?.is_mine) return "open";
-    // is there a mine below?
-    if (this.#board[y + 1]?.[x]?.is_mine) return "open";
-    // is there a mine to the left?
-    if (this.#board[y]?.[x - 1]?.is_mine) return "open";
-    // is there a mine to the right?
-    if (this.#board[y]?.[x + 1]?.is_mine) return "open";
-    // is there a mine to the top left?
-    if (this.#board[y - 1]?.[x - 1]?.is_mine) return "open";
-    // is there a mine to the top right?
-    if (this.#board[y - 1]?.[x + 1]?.is_mine) return "open";
-    // is there a mine to the bottom left?
-    if (this.#board[y + 1]?.[x - 1]?.is_mine) return "open";
-    // is there a mine to the bottom right?
-    if (this.#board[y + 1]?.[x + 1]?.is_mine) return "open";
+    // if there's a neighbor mine, only open the current cell
+    if (this.neighbors_of(x, y).some((cell) => cell.is_mine)) return "open";
 
     // otherwise we're wide open!
     return "wide_open";
   }
 
-  run_click_at(x: number, y: number, { ignore_bounds = false } = {}) {
-    let result = this.#try_click_at(x, y);
-    switch (result) {
+  click(x: number, y: number) {
+    switch (this.#try_click_at(x, y)) {
       case "already_open":
         return;
       case "clicked_on_mine":
@@ -168,30 +132,12 @@ class Game {
         this.#board[y][x].is_open = true;
         return;
       case "out_of_range":
-        if (ignore_bounds) return;
-        else throw "out of range!";
+        throw "out of range!";
       case "wide_open":
         this.#board[y][x].is_open = true;
 
         // time to expand in each direction
-
-        // above
-        this.run_click_at(x, y - 1, { ignore_bounds: true });
-        // below
-        this.run_click_at(x, y + 1, { ignore_bounds: true });
-        // left
-        this.run_click_at(x - 1, y, { ignore_bounds: true });
-        // right
-        this.run_click_at(x + 1, y, { ignore_bounds: true });
-        // top left
-        this.run_click_at(x - 1, y - 1, { ignore_bounds: true });
-        // top right
-        this.run_click_at(x + 1, y - 1, { ignore_bounds: true });
-        // bottom left
-        this.run_click_at(x - 1, y + 1, { ignore_bounds: true });
-        // bottom right
-        this.run_click_at(x + 1, y + 1, { ignore_bounds: true });
-        return;
+        for (let cell of this.neighbors_of(x, y)) this.click(cell.x, cell.y);
     }
   }
 
@@ -313,7 +259,7 @@ board.addEventListener("click", (e) => {
     load_mines_html(board, game);
   }
   if (game.is_flagged(x, y)) return;
-  game.run_click_at(x, y);
+  game.click(x, y);
   update_board_html(game, board);
   if (game.is_game_over()) board.classList.add("game-over");
   else if (game.is_won()) board.classList.add("game-won");
