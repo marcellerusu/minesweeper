@@ -291,7 +291,7 @@ board.addEventListener("click", (e) => {
   } catch {}
   update_board_html(game, board);
   if (game.is_game_over()) board.classList.add("game-over");
-  if (game.is_won()) board.classList.add("game-won");
+  else if (game.is_won()) board.classList.add("game-won");
 });
 
 let mouse_x: number, mouse_y: number;
@@ -326,6 +326,6 @@ window.addEventListener("keydown", (e) => {
     }
     update_board_html(game, board);
     if (game.is_game_over()) board.classList.add("game-over");
-    if (game.is_won()) board.classList.add("game-won");
+    else if (game.is_won()) board.classList.add("game-won");
   }
 });
