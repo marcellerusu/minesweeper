@@ -179,66 +179,68 @@ function update_board_html(game: Game, board: HTMLDivElement) {
   }
 }
 
-let game = new Game(10, 10, 9);
+function start(game: Game) {
+  let board = init_board_html(game);
+  document.querySelector("#app")!.append(board);
 
-let board = init_board_html(game);
-document.querySelector("#app")!.append(board);
+  let mouse_x: number, mouse_y: number;
 
-board.addEventListener("click", (e) => {
-  if (game.is_game_over() || game.is_won()) return;
-  let cell = (e.target as HTMLElement).closest(".cell") as HTMLDivElement;
-  let x = Number(cell.dataset.x),
-    y = Number(cell.dataset.y);
+  window.addEventListener("mousemove", (e) => {
+    mouse_x = e.clientX;
+    mouse_y = e.clientY;
+  });
 
-  if (game.is_empty()) {
-    game.load_mines(x, y);
-    load_mines_html(board, game);
-  }
-  if (game.at(x, y).is_flagged) return;
-  game.click(x, y);
-  update_board_html(game, board);
-  if (game.is_game_over()) board.classList.add("game-over");
-  else if (game.is_won()) board.classList.add("game-won");
-});
-
-let mouse_x: number, mouse_y: number;
-
-window.addEventListener("mousemove", (e) => {
-  mouse_x = e.clientX;
-  mouse_y = e.clientY;
-});
-
-window.addEventListener("keydown", (e) => {
-  if (e.key === " ") {
+  board.addEventListener("click", (e) => {
     if (game.is_game_over() || game.is_won()) return;
-    e.preventDefault();
-    let cell: HTMLDivElement;
-    for (let elem of document.elementsFromPoint(mouse_x, mouse_y)) {
-      cell = elem.closest(".cell") as HTMLDivElement;
-      if (cell) break;
-    }
-    let { x: string_x, y: string_y, mineCount } = cell!.dataset;
-    let x = Number(string_x);
-    let y = Number(string_y);
+    let cell = (e.target as HTMLElement).closest(".cell") as HTMLDivElement;
+    let x = Number(cell.dataset.x),
+      y = Number(cell.dataset.y);
 
     if (game.is_empty()) {
       game.load_mines(x, y);
       load_mines_html(board, game);
     }
-
-    // if cell is closed, mark as a flag
-    if (cell!.dataset.isOpen === "false") {
-      game.toggle_flag(x, y);
-    } else {
-      // if cell is open, and the number of flagged neighbors match the mine count
-      // try to open all neighboring cells
-      if (game.number_of_flagged_near(x, y) === Number(mineCount)) {
-        // TODO: handle opening a mine
-        game.force_expand(x, y);
-      }
-    }
+    if (game.at(x, y).is_flagged) return;
+    game.click(x, y);
     update_board_html(game, board);
     if (game.is_game_over()) board.classList.add("game-over");
     else if (game.is_won()) board.classList.add("game-won");
-  }
-});
+  });
+
+  window.addEventListener("keydown", (e) => {
+    if (e.key === " ") {
+      if (game.is_game_over() || game.is_won()) return;
+      e.preventDefault();
+      let cell: HTMLDivElement;
+      for (let elem of document.elementsFromPoint(mouse_x, mouse_y)) {
+        cell = elem.closest(".cell") as HTMLDivElement;
+        if (cell) break;
+      }
+      let { x: string_x, y: string_y, mineCount } = cell!.dataset;
+      let x = Number(string_x);
+      let y = Number(string_y);
+
+      if (game.is_empty()) {
+        game.load_mines(x, y);
+        load_mines_html(board, game);
+      }
+
+      // if cell is closed, mark as a flag
+      if (cell!.dataset.isOpen === "false") {
+        game.toggle_flag(x, y);
+      } else {
+        // if cell is open, and the number of flagged neighbors match the mine count
+        // try to open all neighboring cells
+        if (game.number_of_flagged_near(x, y) === Number(mineCount)) {
+          // TODO: handle opening a mine
+          game.force_expand(x, y);
+        }
+      }
+      update_board_html(game, board);
+      if (game.is_game_over()) board.classList.add("game-over");
+      else if (game.is_won()) board.classList.add("game-won");
+    }
+  });
+}
+
+start(new Game(10, 10, 9));
