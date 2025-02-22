@@ -31,6 +31,7 @@ class Game {
     while (number_of_mines_left > 0) {
       let x = Math.floor(Math.random() * this.WIDTH);
       let y = Math.floor(Math.random() * this.HEIGHT);
+      // ensure that you always start with a wide open first move
       if (Math.abs(x - opening_x) <= 1 && Math.abs(y - opening_y) <= 1)
         continue;
       if (this.#board[y][x].is_mine) continue;
