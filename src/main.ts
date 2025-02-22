@@ -251,6 +251,11 @@ const svg_numbers_and_icons = {
   5: `<polygon points="2,9 7,9 8,8 8,5 7,4 4,4 4,3 8,3 8,1 2,1 2,5.75 6,5.75 6,7 2,7" style="fill: #520000" />`,
   6: `<polygon points="4,7 4,5.75 2,5 2,8 3,9 7,9 8,8 8,5 7,4 4,4 4,3 7.5,3 7.5,1 3,1 2,2 2,5.75 6,5.75 6,7 2,7" style="fill: #005252" />`,
   7: `<polygon points="3,9 5,9 8,3.5 8,1 2,1 2,2.75 6,2.75 6,3.5" style="fill: #0f0f0f" />`,
+  8: `
+    <polygon points="3,9 7,9 8,8 8,6 7,5 8,4 8,2 7,1 3,1 2,2 2,4 3,5 2,6 2,8" style="fill: #525252" />
+    <polygon points="4,7.5 6,7.5 6.5,7 6.5,6.5 6,6 4,6 3.5,6.5 3.5,7" style="fill: grey" />
+    <polygon points="4,4 6,4 6.5,3.5 6.5,3 6,2.5 4,2.5 3.5,3 3.5,3.5" style="fill: grey" />
+  `,
   flag: `
     <polygon class="flag" points="2,9 8,9 8,8 6.5,7 6.5,1 5.5,1 5.5,7 2,8" style="fill: black" />
     <polygon class="flag" points="2,3 5.5,1 5.5,5" style="fill: #a00" />
@@ -300,7 +305,7 @@ function update_board_html(game: Game, board: HTMLDivElement) {
   }
 }
 
-let game = new Game(10, 10, 50);
+let game = new Game(10, 10, 80);
 
 game.load_mines();
 
