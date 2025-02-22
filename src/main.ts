@@ -21,7 +21,8 @@ class Game {
     while (number_of_mines_left > 0) {
       let x = Math.floor(Math.random() * this.WIDTH);
       let y = Math.floor(Math.random() * this.HEIGHT);
-      if (x === opening_x && y === opening_y) continue;
+      if (Math.abs(x - opening_x) <= 1 && Math.abs(y - opening_y) <= 1)
+        continue;
       if (this.#board[y][x].is_mine) continue;
       this.#board[y][x].is_mine = true;
       number_of_mines_left--;
