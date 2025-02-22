@@ -216,6 +216,10 @@ const svg_numbers_and_icons = {
   `,
 } as Record<string | number, string>;
 
+function svg_for(svg: string) {
+  return `<svg viewbox="0 0 10 10">${svg}</svg>`;
+}
+
 function create_board_html(game: Game) {
   let board = document.createElement("div");
   board.classList.add("board");
@@ -233,12 +237,11 @@ function create_board_html(game: Game) {
       cell.dataset.isFlagged = is_flagged.toString();
       cell.dataset.x = x.toString();
       cell.dataset.y = y.toString();
-      if (is_mine)
-        cell.innerHTML += `<svg viewbox="0 0 10 10">${svg_numbers_and_icons.mine}</svg>`;
+      if (is_mine) cell.innerHTML += svg_for(svg_numbers_and_icons.mine);
       else if (mine_count !== 0)
-        cell.innerHTML += `<svg viewbox="0 0 10 10">${svg_numbers_and_icons[mine_count]}</svg>`;
+        cell.innerHTML += svg_for(svg_numbers_and_icons[mine_count]);
 
-      cell.innerHTML += `<svg viewbox="0 0 10 10">${svg_numbers_and_icons.flag}</svg>`;
+      cell.innerHTML += svg_for(svg_numbers_and_icons.flag);
       row.append(cell);
     }
     board.append(row);
