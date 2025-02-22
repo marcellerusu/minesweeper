@@ -211,37 +211,6 @@ function mine() {
   return mine;
 }
 
-function number() {
-  let num = document.createElement("div");
-  num.classList.add("number");
-  let a = document.createElement("div");
-  a.classList.add("a");
-  let b = document.createElement("div");
-  b.classList.add("b");
-  let c = document.createElement("div");
-  c.classList.add("c");
-  let d = document.createElement("div");
-  d.classList.add("d");
-  let e = document.createElement("div");
-  e.classList.add("e");
-  let f = document.createElement("div");
-  f.classList.add("f");
-  let g = document.createElement("div");
-  g.classList.add("g");
-  let h = document.createElement("div");
-  h.classList.add("h");
-  let i = document.createElement("div");
-  i.classList.add("i");
-  let j = document.createElement("div");
-  j.classList.add("j");
-  let k = document.createElement("div");
-  k.classList.add("k");
-  let l = document.createElement("div");
-  l.classList.add("l");
-  num.append(a, b, c, d, e, f, g, h, i, j, k, l);
-  return num;
-}
-
 // viewbox = 0 0 10 10
 const svg_numbers_and_icons = {
   1: `<polygon points="2,9 8,9 8,7 6,7 6,1 4,1 2,4 4,4 4,7 2,7" style="fill: #00a" />`,
@@ -281,11 +250,7 @@ function create_board_html(game: Game) {
       cell.dataset.y = y.toString();
       if (is_mine) cell.append(mine());
       else if (mine_count !== 0) {
-        if (svg_numbers_and_icons[mine_count]) {
-          cell.innerHTML += `<svg viewbox="0 0 10 10">${svg_numbers_and_icons[mine_count]}</svg>`;
-        } else {
-          cell.append(number());
-        }
+        cell.innerHTML += `<svg viewbox="0 0 10 10">${svg_numbers_and_icons[mine_count]}</svg>`;
       }
       cell.innerHTML += `<svg viewbox="0 0 10 10">${svg_numbers_and_icons.flag}</svg>`;
       row.append(cell);
@@ -305,7 +270,7 @@ function update_board_html(game: Game, board: HTMLDivElement) {
   }
 }
 
-let game = new Game(10, 10, 80);
+let game = new Game(10, 10, 9);
 
 game.load_mines();
 

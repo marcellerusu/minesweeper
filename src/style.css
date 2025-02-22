@@ -59,14 +59,14 @@ span {
 }
 
 .cell[data-is-open="false"] svg {
-  /* display: none; */
+  display: none;
 }
 
 .cell[data-is-flagged="true"] svg:has(.flag) {
   display: flex;
 }
 
-svg:has(.flag) {
+.cell[data-is-open="true"] svg:has(.flag) {
   display: none;
 }
 
