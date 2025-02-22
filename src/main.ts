@@ -162,7 +162,7 @@ class Game {
         return;
       case "clicked_on_mine":
         this.#board[y][x].is_open = true;
-        throw "game over";
+        return;
       case "open":
         this.#board[y][x].is_open = true;
         return;
@@ -312,9 +312,7 @@ board.addEventListener("click", (e) => {
     load_mines_html(board, game);
   }
   if (game.is_flagged(x, y)) return;
-  try {
-    game.run_click_at(x, y);
-  } catch {}
+  game.run_click_at(x, y);
   update_board_html(game, board);
   if (game.is_game_over()) board.classList.add("game-over");
   else if (game.is_won()) board.classList.add("game-won");
