@@ -96,16 +96,13 @@ class Game {
     if (cell.is_mine) {
       // open, and now the game is over
       this.#board[y][x].is_open = true;
-    } else if (cell.is_open) {
-      // do nothing
-    } else if (this.number_of_mines_near(x, y) > 0) {
-      // only open current cell
+    } else if (!cell.is_open) {
+      // open current cell
       this.#board[y][x].is_open = true;
-    } else {
-      // open current cell, and "click" each neighbor
-      this.#board[y][x].is_open = true;
-      for (let neighbor of this.neighbors_of(x, y))
-        this.click(neighbor.x, neighbor.y);
+      if (this.number_of_mines_near(x, y) === 0)
+        // open up the neighbors
+        for (let neighbor of this.neighbors_of(x, y))
+          this.click(neighbor.x, neighbor.y);
     }
   }
 
