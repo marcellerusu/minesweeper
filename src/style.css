@@ -13,14 +13,13 @@
   -moz-osx-font-smoothing: grayscale;
   display: flex;
   justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
 }
 
 * {
   box-sizing: border-box;
-}
-
-.board {
-  margin-top: 5em;
 }
 
 span {
@@ -84,4 +83,54 @@ span {
   border: 2px solid #333;
   padding: 2px;
   background-color: #a00;
+}
+
+.board.game-over {
+  .cell {
+    pointer-events: none;
+    filter: saturate(0);
+  }
+  &::after {
+    font-family: "Courier New";
+    font-weight: bolder;
+    font-size: 20px;
+    text-decoration: underline;
+
+    content: "Game over";
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(185, 0, 0, 0.55);
+    width: calc(30px * var(--width));
+    height: calc(30px * var(--height));
+    left: 50%;
+    top: 50%;
+    transform: translateX(-50%) translateY(-50%);
+  }
+}
+
+.board.game-won {
+  .cell {
+    pointer-events: none;
+    filter: saturate(0);
+  }
+  &::after {
+    font-family: "Courier New";
+    font-weight: bolder;
+    font-size: 20px;
+    text-decoration: underline;
+
+    content: "You won!";
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(6, 185, 0, 0.55);
+    width: calc(30px * var(--width));
+    height: calc(30px * var(--height));
+    left: 50%;
+    top: 50%;
+    transform: translateX(-50%) translateY(-50%);
+  }
 }

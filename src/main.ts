@@ -183,6 +183,18 @@ class Game {
         return;
     }
   }
+
+  is_game_over() {
+    return this.#board.some((row) =>
+      row.some((cell) => cell.is_mine && cell.is_open)
+    );
+  }
+
+  is_won() {
+    return this.#board.every((row) =>
+      row.every((cell) => (cell.is_mine && cell.is_flagged) || cell.is_open)
+    );
+  }
 }
 
 // viewbox = 0 0 10 10
@@ -223,6 +235,8 @@ function svg_for(svg: string) {
 function create_board_html(game: Game) {
   let board = document.createElement("div");
   board.classList.add("board");
+  board.style.setProperty("--width", game.WIDTH.toString());
+  board.style.setProperty("--height", game.HEIGHT.toString());
   for (let y = 0; y < game.HEIGHT; y++) {
     let row = document.createElement("span");
     for (let x = 0; x < game.WIDTH; x++) {
@@ -267,6 +281,7 @@ let board = create_board_html(game);
 document.querySelector("#app")!.append(board);
 
 board.addEventListener("click", (e) => {
+  if (game.is_game_over() || game.is_won()) return;
   let cell = (e.target as HTMLElement).closest(".cell") as HTMLDivElement;
   let x = Number(cell.dataset.x),
     y = Number(cell.dataset.y);
@@ -275,6 +290,8 @@ board.addEventListener("click", (e) => {
     game.run_click_at(x, y);
   } catch {}
   update_board_html(game, board);
+  if (game.is_game_over()) board.classList.add("game-over");
+  if (game.is_won()) board.classList.add("game-won");
 });
 
 let mouse_x: number, mouse_y: number;
@@ -286,6 +303,7 @@ window.addEventListener("mousemove", (e) => {
 
 window.addEventListener("keydown", (e) => {
   if (e.key === " ") {
+    if (game.is_game_over() || game.is_won()) return;
     e.preventDefault();
     let cell: HTMLDivElement;
     for (let elem of document.elementsFromPoint(mouse_x, mouse_y)) {
@@ -307,5 +325,7 @@ window.addEventListener("keydown", (e) => {
       }
     }
     update_board_html(game, board);
+    if (game.is_game_over()) board.classList.add("game-over");
+    if (game.is_won()) board.classList.add("game-won");
   }
 });
