@@ -46,34 +46,28 @@ class Game {
     return this.#board.every((row) => row.every((cell) => !cell.is_mine));
   }
 
-  at(x: number, y: number): Readonly<Cell> {
-    return this.#board[y][x];
+  at(x: number, y: number): Readonly<Cell> | undefined {
+    return this.#board[y]?.[x];
   }
 
-  open_unless_flagged(x: number, y: number) {
-    if (x < 0 || x >= this.WIDTH || y < 0 || y >= this.HEIGHT) return;
-    if (this.#board[y][x].is_flagged) return;
-    this.click(x, y);
-  }
-
-  neighbors_of(x: number, y: number): Cell[] {
+  neighbors_of(x: number, y: number): Readonly<Cell>[] {
     return [
       // above
-      this.#board[y - 1]?.[x],
+      this.at(x, y - 1),
       // below
-      this.#board[y + 1]?.[x],
+      this.at(x, y + 1),
       // to the left
-      this.#board[y]?.[x - 1],
+      this.at(x - 1, y),
       // to the right
-      this.#board[y]?.[x + 1],
+      this.at(x + 1, y),
       // to the top left
-      this.#board[y - 1]?.[x - 1],
+      this.at(x - 1, y - 1),
       // to the top right
-      this.#board[y - 1]?.[x + 1],
+      this.at(x + 1, y - 1),
       // to the bottom left
-      this.#board[y + 1]?.[x - 1],
+      this.at(x - 1, y + 1),
       // to the bottom right
-      this.#board[y + 1]?.[x + 1],
+      this.at(x + 1, y + 1),
     ].filter((item) => typeof item !== "undefined");
   }
 
@@ -90,18 +84,19 @@ class Game {
   }
 
   force_expand(x: number, y: number) {
-    for (let cell of this.neighbors_of(x, y))
-      this.open_unless_flagged(cell.x, cell.y);
+    for (let cell of this.neighbors_of(x, y)) {
+      if (!cell.is_flagged) this.click(cell.x, cell.y);
+    }
   }
 
   click(x: number, y: number) {
-    if (x < 0 || x >= this.WIDTH || y < 0 || y >= this.HEIGHT)
-      throw "out_of_range";
+    let cell = this.at(x, y);
+    if (!cell) throw "out_of_range";
 
-    if (this.#board[y][x].is_mine) {
+    if (cell.is_mine) {
       // open, and now the game is over
       this.#board[y][x].is_open = true;
-    } else if (this.#board[y][x].is_open) {
+    } else if (cell.is_open) {
       // do nothing
     } else if (this.number_of_mines_near(x, y) > 0) {
       // only open current cell
@@ -109,7 +104,8 @@ class Game {
     } else {
       // open current cell, and "click" each neighbor
       this.#board[y][x].is_open = true;
-      for (let cell of this.neighbors_of(x, y)) this.click(cell.x, cell.y);
+      for (let neighbor of this.neighbors_of(x, y))
+        this.click(neighbor.x, neighbor.y);
     }
   }
 
@@ -153,7 +149,7 @@ function load_mines_html(board: HTMLDivElement, game: Game) {
   ) as NodeListOf<HTMLDivElement>) {
     let x = Number(cell.dataset.x),
       y = Number(cell.dataset.y);
-    let { is_mine, is_flagged, is_open } = game.at(x, y);
+    let { is_mine, is_flagged, is_open } = game.at(x, y)!;
     let mine_count = game.number_of_mines_near(x, y);
     cell.dataset.isMine = is_mine.toString();
     cell.dataset.isOpen = is_open.toString();
@@ -173,7 +169,7 @@ function update_board_html(game: Game, board: HTMLDivElement) {
     ".cell"
   ) as NodeListOf<HTMLDivElement>) {
     let { x, y } = cell.dataset;
-    let { is_open, is_flagged } = game.at(Number(x), Number(y));
+    let { is_open, is_flagged } = game.at(Number(x), Number(y))!;
     cell.dataset.isOpen = is_open.toString();
     cell.dataset.isFlagged = is_flagged.toString();
   }
@@ -200,7 +196,7 @@ function start(game: Game) {
       game.load_mines(x, y);
       load_mines_html(board, game);
     }
-    if (game.at(x, y).is_flagged) return;
+    if (game.at(x, y)!.is_flagged) return;
     game.click(x, y);
     update_board_html(game, board);
     if (game.is_game_over()) board.classList.add("game-over");
@@ -231,10 +227,8 @@ function start(game: Game) {
       } else {
         // if cell is open, and the number of flagged neighbors match the mine count
         // try to open all neighboring cells
-        if (game.number_of_flagged_near(x, y) === Number(mineCount)) {
-          // TODO: handle opening a mine
+        if (game.number_of_flagged_near(x, y) === Number(mineCount))
           game.force_expand(x, y);
-        }
       }
       update_board_html(game, board);
       if (game.is_game_over()) board.classList.add("game-over");
