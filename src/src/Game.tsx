@@ -108,6 +108,63 @@ function expand(
   return board;
 }
 
+function handleClick(
+  { board, status }: BoardState,
+  cell: Types.Cell
+): BoardState {
+  switch (status) {
+    case "initial":
+      board = generateMinesFor(board, cell.x, cell.y);
+      board = open(board, cell.x, cell.y);
+      return {
+        board: expand(board, cell.x, cell.y),
+        status: "active",
+      };
+    case "active":
+      if (cell.isMine) {
+        return { board: open(board, cell.x, cell.y), status };
+      } else if (!cell.isOpen) {
+        board = open(board, cell.x, cell.y);
+
+        if (mineCountFor(board, cell) === 0)
+          board = expand(board, cell.x, cell.y);
+
+        return { board, status };
+      } else {
+        return { board, status };
+      }
+  }
+}
+
+function handleSpace(
+  board: Types.Board,
+  mouse: { x: number; y: number }
+): Types.Board {
+  let cellHtml = document
+    .elementsFromPoint(mouse.x, mouse.y)
+    .find((elem) => elem.matches(".cell[data-x][data-y]")) as HTMLDivElement;
+  if (!cellHtml) return board;
+  let x = Number(cellHtml.dataset.x),
+    y = Number(cellHtml.dataset.y);
+
+  let cell = board.flat().find((c) => c.x === x && c.y === y);
+  if (!cell) return board;
+
+  if (cell.isOpen && mineCountFor(board, cell) === flagCountFor(board, cell)) {
+    board = expand(board, cell.x, cell.y);
+  } else {
+    board = board.with(
+      cell.y,
+      board[cell.y].with(cell.x, {
+        ...cell,
+        isFlagged: !board[cell.y][cell.x].isFlagged,
+      })
+    );
+  }
+
+  return board;
+}
+
 export type BoardAction =
   | {
       type: "open";
@@ -126,72 +183,11 @@ function boardReducer(
 ): BoardState {
   switch (action.type) {
     case "open":
-      return {
-        board: board.with(
-          action.y,
-          board[action.y].with(action.x, {
-            ...board[action.y][action.x],
-            isOpen: true,
-          })
-        ),
-        status,
-      };
+      return { board: open(board, action.x, action.y), status };
     case "click":
-      switch (status) {
-        case "initial":
-          board = generateMinesFor(board, action.cell.x, action.cell.y);
-          board = open(board, action.cell.x, action.cell.y);
-          return {
-            board: expand(board, action.cell.x, action.cell.y),
-            status: "active",
-          };
-        case "active":
-          if (action.cell.isMine) {
-            return { board: open(board, action.cell.x, action.cell.y), status };
-          } else if (!action.cell.isOpen) {
-            board = open(board, action.cell.x, action.cell.y);
-
-            if (mineCountFor(board, action.cell) === 0)
-              board = expand(board, action.cell.x, action.cell.y);
-
-            return { board, status };
-          } else {
-            return { board, status };
-          }
-      }
+      return handleClick({ board, status }, action.cell);
     case "space":
-      let { mouse } = action;
-      let cellHtml = document
-        .elementsFromPoint(mouse.x, mouse.y)
-        .find((elem) =>
-          elem.matches(".cell[data-x][data-y]")
-        ) as HTMLDivElement;
-      if (!cellHtml) return { board, status };
-      let x = Number(cellHtml.dataset.x),
-        y = Number(cellHtml.dataset.y);
-
-      let cell = board.flat().find((c) => c.x === x && c.y === y);
-      if (!cell) return { board, status };
-
-      if (
-        cell.isOpen &&
-        mineCountFor(board, cell) === flagCountFor(board, cell)
-      ) {
-        board = expand(board, cell.x, cell.y);
-      } else {
-        board = board.with(
-          cell.y,
-          board[cell.y].with(cell.x, {
-            ...cell,
-            isFlagged: !board[cell.y][cell.x].isFlagged,
-          })
-        );
-      }
-
-      return {
-        board,
-        status,
-      };
+      return { board: handleSpace(board, action.mouse), status };
   }
 }
 
