@@ -1,20 +1,21 @@
 import "./Cell.css";
 import type { Cell } from "../types";
-import React from "react";
+import type { BoardAction } from "../Board/Board";
+import React, { Dispatch } from "react";
 import ICONS, { Svg } from "../icons";
 
 function Cell({
   cell,
   mineCount,
-  onPress,
+  dispatch,
 }: {
   cell: Cell;
   mineCount: number;
-  onPress: () => void;
+  dispatch: Dispatch<BoardAction>;
 }) {
   return (
     <div
-      onMouseDown={onPress}
+      onMouseDown={() => dispatch({ type: "click", cell })}
       className="cell"
       data-is-open={cell.isOpen}
       data-is-flagged={cell.isFlagged}
