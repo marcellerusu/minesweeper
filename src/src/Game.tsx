@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState } from "react";
+import React, { useEffect, useReducer } from "react";
 import type * as Types from "./types";
 import type { Point } from "./types";
 import Cell from "./Cell/Cell";
