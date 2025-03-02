@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState } from "react";
+import React, { useEffect, useMemo, useReducer, useState } from "react";
 import type * as Types from "./types";
 import type { Point } from "./types";
 import Cell from "./Cell/Cell";
@@ -14,13 +14,7 @@ const WIDTH = 9,
   TOTAL_MINES = 9;
 
 function emptyCell(x: number, y: number): Types.Cell {
-  return {
-    isMine: false,
-    isOpen: false,
-    isFlagged: false,
-    x,
-    y,
-  };
+  return { isMine: false, isOpen: false, isFlagged: false, x, y };
 }
 
 function emptyBoard(): BoardState {
@@ -33,23 +27,18 @@ function emptyBoard(): BoardState {
 }
 
 function generateMinesFor(board: Types.Board, opening: Point) {
-  let newBoard = board;
   let numberOfMinesLeft = TOTAL_MINES;
   while (numberOfMinesLeft > 0) {
     // generate a point and make sure that it doesn't exist in the board
-    let mineX = Math.floor(Math.random() * WIDTH);
-    let mineY = Math.floor(Math.random() * HEIGHT);
+    let x = Math.floor(Math.random() * WIDTH),
+      y = Math.floor(Math.random() * HEIGHT);
     // ensure that you always start with a wide open first move
-    if (Math.abs(mineX - opening.x) <= 1 && Math.abs(mineY - opening.y) <= 1)
-      continue;
-    if (newBoard[mineY][mineX].isMine) continue;
-    newBoard = newBoard.with(
-      mineY,
-      newBoard[mineY].with(mineX, { ...newBoard[mineY][mineX], isMine: true })
-    );
+    if (Math.abs(x - opening.x) <= 1 && Math.abs(y - opening.y) <= 1) continue;
+    if (board[y][x].isMine) continue;
+    board = board.with(y, board[y].with(x, { ...board[y][x], isMine: true }));
     numberOfMinesLeft--;
   }
-  return newBoard;
+  return board;
 }
 
 function neighborsOf(board: Types.Board, { x, y }: Point): Readonly<Cell>[] {
@@ -123,9 +112,7 @@ function handleClick(
         return { board: open(board, cell), status };
       } else if (!cell.isOpen) {
         board = open(board, cell);
-
         if (mineCountFor(board, cell) === 0) board = expand(board, cell);
-
         return { board, status };
       } else {
         return { board, status };
@@ -150,11 +137,8 @@ function handleSpace(board: Types.Board, mouse: Point): Types.Board {
     return expand(board, cell);
   else
     return board.with(
-      cell.y,
-      board[cell.y].with(cell.x, {
-        ...cell,
-        isFlagged: !board[cell.y][cell.x].isFlagged,
-      })
+      y,
+      board[y].with(x, { ...cell, isFlagged: !cell.isFlagged })
     );
 }
 
