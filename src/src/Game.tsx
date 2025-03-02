@@ -1,5 +1,6 @@
 import React, { useEffect, useReducer, useState } from "react";
 import type * as Types from "./types";
+import type { Point } from "./types";
 import Cell from "./Cell/Cell";
 import Board from "./Board/Board";
 
@@ -31,7 +32,7 @@ function emptyBoard(): BoardState {
   };
 }
 
-function generateMinesFor(board: Types.Board, opening: Types.Point) {
+function generateMinesFor(board: Types.Board, opening: Point) {
   let newBoard = board;
   let numberOfMinesLeft = TOTAL_MINES;
   while (numberOfMinesLeft > 0) {
@@ -51,11 +52,7 @@ function generateMinesFor(board: Types.Board, opening: Types.Point) {
   return newBoard;
 }
 
-function neighborsOf(
-  board: Types.Board,
-  x: number,
-  y: number
-): Readonly<Cell>[] {
+function neighborsOf(board: Types.Board, { x, y }: Point): Readonly<Cell>[] {
   return [
     // above
     board[y - 1]?.[x],
@@ -78,28 +75,28 @@ function neighborsOf(
   ].filter((item) => typeof item !== "undefined");
 }
 
-function mineCountFor(board: Types.Board, { x, y }: Types.Point): number {
-  return neighborsOf(board, x, y).filter((c) => c.isMine).length;
+function mineCountFor(board: Types.Board, cell: Point): number {
+  return neighborsOf(board, cell).filter((c) => c.isMine).length;
 }
 
-function flagCountFor(board: Types.Board, { x, y }: Types.Point): number {
-  return neighborsOf(board, x, y).filter((c) => c.isFlagged).length;
+function flagCountFor(board: Types.Board, cell: Point): number {
+  return neighborsOf(board, cell).filter((c) => c.isFlagged).length;
 }
 
-function open(board: Types.Board, { x, y }: Types.Point) {
+function open(board: Types.Board, { x, y }: Point) {
   return board.with(y, board[y].with(x, { ...board[y][x], isOpen: true }));
 }
 
 function expand(
   board: Types.Board,
-  { x, y }: Types.Point,
+  cell: Point,
   ignore: { x: number; y: number }[] = []
 ): Types.Board {
-  let neighbors = neighborsOf(board, x, y)
-    .filter((cell) => !ignore.some((c) => c.x === cell.x && c.y === cell.y))
-    .filter((cell) => !cell.isFlagged);
+  let neighbors = neighborsOf(board, cell)
+    .filter((a) => !ignore.some((b) => b.x === a.x && b.y === a.y))
+    .filter(({ isFlagged }) => !isFlagged);
 
-  ignore = [...ignore, { x, y }, ...neighbors];
+  ignore = [...ignore, cell, ...neighbors];
 
   for (let cell of neighbors) {
     board = open(board, cell);
