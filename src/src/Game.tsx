@@ -143,26 +143,25 @@ function handleSpace(
   let cellHtml = document
     .elementsFromPoint(mouse.x, mouse.y)
     .find((elem) => elem.matches(".cell[data-x][data-y]")) as HTMLDivElement;
+
   if (!cellHtml) return board;
+
   let x = Number(cellHtml.dataset.x),
     y = Number(cellHtml.dataset.y);
 
   let cell = board.flat().find((c) => c.x === x && c.y === y);
   if (!cell) return board;
 
-  if (cell.isOpen && mineCountFor(board, cell) === flagCountFor(board, cell)) {
-    board = expand(board, cell.x, cell.y);
-  } else {
-    board = board.with(
+  if (cell.isOpen && mineCountFor(board, cell) === flagCountFor(board, cell))
+    return expand(board, cell.x, cell.y);
+  else
+    return board.with(
       cell.y,
       board[cell.y].with(cell.x, {
         ...cell,
         isFlagged: !board[cell.y][cell.x].isFlagged,
       })
     );
-  }
-
-  return board;
 }
 
 export type BoardAction =
