@@ -163,21 +163,23 @@ function boardReducer(state: BoardState, action: BoardAction): BoardState {
 
 function Game() {
   let [{ board }, dispatch] = useReducer(boardReducer, emptyBoard());
-  let [mouse, setMouse] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
-    let track = (e: MouseEvent) => setMouse({ x: e.clientX, y: e.clientY });
-    window.addEventListener("mousemove", track);
-    return () => window.removeEventListener("mousemove", track);
-  }, []);
-
-  useEffect(() => {
+    let mouse = { x: 0, y: 0 };
+    function trackMouse(e: MouseEvent) {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+    }
     function onKeydown(e: KeyboardEvent) {
       if (e.key === " ") dispatch({ type: "space", mouse });
     }
+    window.addEventListener("mousemove", trackMouse);
     window.addEventListener("keydown", onKeydown);
-    return () => window.removeEventListener("keydown", onKeydown);
-  }, [mouse, board]);
+    return () => {
+      window.removeEventListener("mousemove", trackMouse);
+      window.removeEventListener("keydown", onKeydown);
+    };
+  }, []);
 
   return (
     <Board board={board} mineCountFor={mineCountFor} dispatch={dispatch} />
