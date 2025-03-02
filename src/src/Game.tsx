@@ -119,18 +119,27 @@ function handleClick(
   }
 }
 
+/**
+ * pressing space on top of a cell means one of the following
+ * - open the neighboring mines (if the cell is open, and # flag == mine count for cell)
+ * - flag/unflag the cell (if the cell is unopened)
+ */
 function handleSpace(board: Types.Board, mouse: Point): Types.Board {
+  // get the cell dom element based on current mouse position
   let cellHtml = document
     .elementsFromPoint(mouse.x, mouse.y)
     .find((elem) => elem.matches(".cell[data-x][data-y]")) as HTMLDivElement;
 
+  // in case the mouse isn't on top of a cell
   if (!cellHtml) return board;
 
+  // guaranteed to exist since the .matches(".cell[data-x][data-y]")
   let x = Number(cellHtml.dataset.x),
     y = Number(cellHtml.dataset.y);
 
-  let cell = board.flat().find((c) => c.x === x && c.y === y);
-  if (!cell) return board;
+  // find the cell in react state <- if it doesn't exist, we got a big problem
+  // it is better to crash than ignore the issue here
+  let cell = board.flat().find((c) => c.x === x && c.y === y)!;
 
   if (cell.isOpen) {
     if (mineCountFor(board, cell) === flagCountFor(board, cell)) {
