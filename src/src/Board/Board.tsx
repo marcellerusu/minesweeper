@@ -10,10 +10,14 @@ type BoardState = {
   status: "initial" | "active";
 };
 
-function emptyBoard(width: number, height: number): BoardState {
+const WIDTH = 9,
+  HEIGHT = 9,
+  TOTAL_MINES = 9;
+
+function emptyBoard(): BoardState {
   return {
-    board: Array.from({ length: height }, (_, y) =>
-      Array.from({ length: width }, (_, x) => ({
+    board: Array.from({ length: HEIGHT }, (_, y) =>
+      Array.from({ length: WIDTH }, (_, x) => ({
         isMine: false,
         isOpen: false,
         isFlagged: false,
@@ -27,17 +31,14 @@ function emptyBoard(width: number, height: number): BoardState {
 
 function generateMinesFor(
   board: Board,
-  totalNumberOfMines: number,
-  boardWidth: number,
-  boardHeight: number,
   openingX: number,
   openingY: number
 ): Board {
   let newBoard = board;
-  let numberOfMinesLeft = totalNumberOfMines;
+  let numberOfMinesLeft = TOTAL_MINES;
   while (numberOfMinesLeft > 0) {
-    let mineX = Math.floor(Math.random() * boardWidth);
-    let mineY = Math.floor(Math.random() * boardHeight);
+    let mineX = Math.floor(Math.random() * WIDTH);
+    let mineY = Math.floor(Math.random() * HEIGHT);
     // ensure that you always start with a wide open first move
     if (Math.abs(mineX - openingX) <= 1 && Math.abs(mineY - openingY) <= 1)
       continue;
@@ -133,28 +134,29 @@ function boardReducer(
         ),
         status,
       };
-
     case "click":
-      if (status === "initial") {
-        board = generateMinesFor(board, 9, 9, 9, action.cell.x, action.cell.y);
-        board = open(board, action.cell.x, action.cell.y);
-        return {
-          board: expand(board, action.cell.x, action.cell.y),
-          status: "active",
-        };
-      } else if (status === "active") {
-        if (action.cell.isMine) {
-          return { board: open(board, action.cell.x, action.cell.y), status };
-        } else if (!action.cell.isOpen) {
+      switch (status) {
+        case "initial":
+          board = generateMinesFor(board, action.cell.x, action.cell.y);
           board = open(board, action.cell.x, action.cell.y);
+          return {
+            board: expand(board, action.cell.x, action.cell.y),
+            status: "active",
+          };
+        case "active":
+          if (action.cell.isMine) {
+            return { board: open(board, action.cell.x, action.cell.y), status };
+          } else if (!action.cell.isOpen) {
+            board = open(board, action.cell.x, action.cell.y);
 
-          if (mineCountFor(board, action.cell) === 0)
-            board = expand(board, action.cell.x, action.cell.y);
+            if (mineCountFor(board, action.cell) === 0)
+              board = expand(board, action.cell.x, action.cell.y);
 
-          return { board, status };
-        }
+            return { board, status };
+          } else {
+            return { board, status };
+          }
       }
-      return { board, status };
     case "space":
       let { mouse } = action;
       let cellHtml = document
@@ -192,7 +194,7 @@ function boardReducer(
 }
 
 function Board() {
-  let [{ board }, dispatch] = useReducer(boardReducer, emptyBoard(9, 9));
+  let [{ board }, dispatch] = useReducer(boardReducer, emptyBoard());
   let [mouse, setMouse] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
