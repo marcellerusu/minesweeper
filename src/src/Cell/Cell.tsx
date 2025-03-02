@@ -4,25 +4,22 @@ import type { BoardAction } from "../Game";
 import React, { Dispatch } from "react";
 import ICONS, { Svg } from "../icons";
 
-function Cell({
-  cell,
-  mineCount,
-  dispatch,
-}: {
+type Props = {
   cell: Cell;
   mineCount: number;
   dispatch: Dispatch<BoardAction>;
-}) {
+};
+
+function Cell({ cell, mineCount, dispatch }: Props) {
   return (
     <div
       onMouseDown={() => dispatch({ type: "click", cell })}
       className="cell"
       data-is-open={cell.isOpen}
       data-is-flagged={cell.isFlagged}
-      data-mine-count={mineCount}
+      data-is-mine={cell.isMine}
       data-x={cell.x}
       data-y={cell.y}
-      data-is-mine={cell.isMine}
     >
       {mineCount > 0 && <Svg>{ICONS[mineCount]}</Svg>}
       {cell.isMine && <Svg>{ICONS.mine}</Svg>}
