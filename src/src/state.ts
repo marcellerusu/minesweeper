@@ -2,6 +2,11 @@ import type { Cell, Board } from "./types";
 import type { Point } from "./types";
 import { createContext, Dispatch } from "react";
 
+export const BoardContext = createContext<[BoardState, Dispatch<BoardAction>]>([
+  { board: [], status: "initial" },
+  (_action: BoardAction) => {},
+]);
+
 const WIDTH = 9,
   HEIGHT = 9,
   TOTAL_MINES = 9;
@@ -23,11 +28,6 @@ export function emptyBoard(): BoardState {
     status: "initial",
   };
 }
-
-export const BoardContext = createContext<[BoardState, Dispatch<BoardAction>]>([
-  emptyBoard(),
-  (_action: BoardAction) => {},
-]);
 
 /**
  * Given an empty board, fill it up with `TOTAL_MINES` worth of mines
