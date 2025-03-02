@@ -12,16 +12,20 @@ const WIDTH = 9,
   HEIGHT = 9,
   TOTAL_MINES = 9;
 
+function emptyCell(x: number, y: number): Types.Cell {
+  return {
+    isMine: false,
+    isOpen: false,
+    isFlagged: false,
+    x,
+    y,
+  };
+}
+
 function emptyBoard(): BoardState {
   return {
     board: Array.from({ length: HEIGHT }, (_, y) =>
-      Array.from({ length: WIDTH }, (_, x) => ({
-        isMine: false,
-        isOpen: false,
-        isFlagged: false,
-        x,
-        y,
-      }))
+      Array.from({ length: WIDTH }, (_, x) => emptyCell(x, y))
     ),
     status: "initial",
   };
@@ -35,6 +39,7 @@ function generateMinesFor(
   let newBoard = board;
   let numberOfMinesLeft = TOTAL_MINES;
   while (numberOfMinesLeft > 0) {
+    // generate a point and make sure that it doesn't exist in the board
     let mineX = Math.floor(Math.random() * WIDTH);
     let mineY = Math.floor(Math.random() * HEIGHT);
     // ensure that you always start with a wide open first move
@@ -72,6 +77,8 @@ function neighborsOf(
     board[y + 1]?.[x - 1],
     // to the bottom right
     board[y + 1]?.[x + 1],
+
+    // need to filter incase we ask for neighbors at the edges of the board
   ].filter((item) => typeof item !== "undefined");
 }
 
@@ -176,17 +183,14 @@ export type BoardAction =
     }
   | { type: "click"; cell: Types.Cell };
 
-function boardReducer(
-  { board, status }: BoardState,
-  action: BoardAction
-): BoardState {
+function boardReducer(state: BoardState, action: BoardAction): BoardState {
   switch (action.type) {
     case "open":
-      return { board: open(board, action.x, action.y), status };
+      return { ...state, board: open(state.board, action.x, action.y) };
     case "click":
-      return handleClick({ board, status }, action.cell);
+      return handleClick(state, action.cell);
     case "space":
-      return { board: handleSpace(board, action.mouse), status };
+      return { ...state, board: handleSpace(state.board, action.mouse) };
   }
 }
 
