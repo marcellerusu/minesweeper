@@ -132,15 +132,17 @@ function handleSpace(board: Types.Board, mouse: Point): Types.Board {
   let cell = board.flat().find((c) => c.x === x && c.y === y);
   if (!cell) return board;
 
-  if (cell.isOpen && mineCountFor(board, cell) === flagCountFor(board, cell)) {
-    return expand(board, cell);
-  } else if (!cell.isOpen) {
+  if (cell.isOpen) {
+    if (mineCountFor(board, cell) === flagCountFor(board, cell)) {
+      return expand(board, cell);
+    } else {
+      return board;
+    }
+  } else {
     return board.with(
       y,
       board[y].with(x, { ...cell, isFlagged: !cell.isFlagged })
     );
-  } else {
-    return board;
   }
 }
 
