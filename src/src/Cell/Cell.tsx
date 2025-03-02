@@ -1,7 +1,7 @@
 import "./Cell.css";
 import type { Cell } from "../types";
 import React, { useContext } from "react";
-import ICONS, { Svg } from "../icons";
+import ICONS, { Svg } from "./icons";
 import { BoardContext, mineCountFor } from "../state";
 
 function Cell({ cell }: { cell: Cell }) {
