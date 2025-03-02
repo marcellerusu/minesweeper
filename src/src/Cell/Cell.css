@@ -2,7 +2,8 @@
   width: var(--cell-size);
   height: var(--cell-size);
   background-color: grey;
-  border: 4px outset black;
+  --border-size: calc(var(--cell-size) / 8);
+  border: var(--border-size) outset black;
 }
 
 .cell[data-is-open="false"] {
@@ -55,12 +56,12 @@
 }
 
 .cell[data-is-open="true"][data-is-mine="false"] {
-  border: 2px solid #555;
-  padding: 2px;
+  border: calc(var(--border-size) / 2) solid #555;
+  padding: calc(var(--border-size) / 2);
 }
 
 .cell[data-is-open="true"][data-is-mine="true"] {
-  border: 2px solid #333;
-  padding: 2px;
+  border: calc(var(--border-size) / 2) solid #333;
+  padding: calc(var(--border-size) / 2);
   background-color: #a00;
 }
