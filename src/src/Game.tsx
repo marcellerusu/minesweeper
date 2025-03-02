@@ -26,6 +26,9 @@ function emptyBoard(): BoardState {
   };
 }
 
+/**
+ * Given an empty board, fill it up with `TOTAL_MINES` worth of mines
+ */
 function generateMinesFor(board: Types.Board, opening: Point) {
   let numberOfMinesLeft = TOTAL_MINES;
   while (numberOfMinesLeft > 0) {
@@ -41,7 +44,10 @@ function generateMinesFor(board: Types.Board, opening: Point) {
   return board;
 }
 
-function neighborsOf(board: Types.Board, { x, y }: Point): Readonly<Cell>[] {
+/**
+ * get the neighboring cells on the board given a point
+ */
+function neighborsOf(board: Types.Board, { x, y }: Point): Cell[] {
   return [
     // above
     board[y - 1]?.[x],
@@ -64,10 +70,16 @@ function neighborsOf(board: Types.Board, { x, y }: Point): Readonly<Cell>[] {
   ].filter((item) => typeof item !== "undefined");
 }
 
+/**
+ * # of mines in the neighbors
+ */
 function mineCountFor(board: Types.Board, cell: Point): number {
   return neighborsOf(board, cell).filter((c) => c.isMine).length;
 }
 
+/**
+ * # of flagged cells in the neighbors
+ */
 function flagCountFor(board: Types.Board, cell: Point): number {
   return neighborsOf(board, cell).filter((c) => c.isFlagged).length;
 }
@@ -76,6 +88,11 @@ function open(board: Types.Board, { x, y }: Point) {
   return board.with(y, board[y].with(x, { ...board[y][x], isOpen: true }));
 }
 
+/**
+ * expand the neighbors of a given cell
+ * - if a neighbor also has 0 mine neighbors, expand that neighbor
+ * - does not expand flagged cells
+ */
 function expand(
   board: Types.Board,
   cell: Point,
@@ -97,6 +114,12 @@ function expand(
   }, board);
 }
 
+/**
+ * # handle cell click
+ * open the current cell, and expand if no neighboring mines
+ *
+ * - if the game hasn't started, the first click will generate the mines for board
+ */
 function handleClick(
   { board, status }: BoardState,
   cell: Types.Cell
@@ -156,14 +179,11 @@ function handleSpace(board: Types.Board, mouse: Point): Types.Board {
 }
 
 export type BoardAction =
-  | { type: "open"; cell: Point }
-  | { type: "space"; mouse: Point }
-  | { type: "click"; cell: Types.Cell };
+  | { type: "click"; cell: Types.Cell }
+  | { type: "space"; mouse: Point };
 
 function boardReducer(state: BoardState, action: BoardAction): BoardState {
   switch (action.type) {
-    case "open":
-      return { ...state, board: open(state.board, action.cell) };
     case "click":
       return handleClick(state, action.cell);
     case "space":
