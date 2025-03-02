@@ -90,7 +90,7 @@ function open(board: Types.Board, { x, y }: Point) {
 function expand(
   board: Types.Board,
   cell: Point,
-  ignore: { x: number; y: number }[] = []
+  ignore: Point[] = []
 ): Types.Board {
   let neighbors = neighborsOf(board, cell)
     .filter((a) => !ignore.some((b) => b.x === a.x && b.y === a.y))
@@ -133,10 +133,7 @@ function handleClick(
   }
 }
 
-function handleSpace(
-  board: Types.Board,
-  mouse: { x: number; y: number }
-): Types.Board {
+function handleSpace(board: Types.Board, mouse: Point): Types.Board {
   let cellHtml = document
     .elementsFromPoint(mouse.x, mouse.y)
     .find((elem) => elem.matches(".cell[data-x][data-y]")) as HTMLDivElement;
@@ -162,14 +159,14 @@ function handleSpace(
 }
 
 export type BoardAction =
-  | { type: "open"; x: number; y: number }
-  | { type: "space"; mouse: { x: number; y: number } }
+  | { type: "open"; cell: Point }
+  | { type: "space"; mouse: Point }
   | { type: "click"; cell: Types.Cell };
 
 function boardReducer(state: BoardState, action: BoardAction): BoardState {
   switch (action.type) {
     case "open":
-      return { ...state, board: open(state.board, action) };
+      return { ...state, board: open(state.board, action.cell) };
     case "click":
       return handleClick(state, action.cell);
     case "space":

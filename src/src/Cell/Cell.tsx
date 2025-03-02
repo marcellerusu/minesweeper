@@ -1,6 +1,6 @@
 import "./Cell.css";
 import type { Cell } from "../types";
-import type { BoardAction } from "../Board/Board";
+import type { BoardAction } from "../Game";
 import React, { Dispatch } from "react";
 import ICONS, { Svg } from "../icons";
 
