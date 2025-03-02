@@ -3,9 +3,14 @@ import React, { useEffect, useReducer, useState } from "react";
 import type * as Types from "../types";
 import Cell from "../Cell/Cell";
 
-export type Board = { board: Types.Cell[][]; status: "initial" | "active" };
+type Board = Types.Cell[][];
 
-function emptyBoard(width: number, height: number): Board {
+type BoardState = {
+  board: Types.Cell[][];
+  status: "initial" | "active";
+};
+
+function emptyBoard(width: number, height: number): BoardState {
   return {
     board: Array.from({ length: height }, (_, y) =>
       Array.from({ length: width }, (_, x) => ({
@@ -21,13 +26,13 @@ function emptyBoard(width: number, height: number): Board {
 }
 
 function generateMinesFor(
-  board: Board["board"],
+  board: Board,
   totalNumberOfMines: number,
   boardWidth: number,
   boardHeight: number,
   openingX: number,
   openingY: number
-): Board["board"] {
+): Board {
   let newBoard = board;
   let numberOfMinesLeft = totalNumberOfMines;
   while (numberOfMinesLeft > 0) {
@@ -46,11 +51,7 @@ function generateMinesFor(
   return newBoard;
 }
 
-function neighborsOf(
-  board: Board["board"],
-  x: number,
-  y: number
-): Readonly<Cell>[] {
+function neighborsOf(board: Board, x: number, y: number): Readonly<Cell>[] {
   return [
     // above
     board[y - 1]?.[x],
@@ -71,24 +72,24 @@ function neighborsOf(
   ].filter((item) => typeof item !== "undefined");
 }
 
-function mineCountFor(board: Board["board"], cell: Cell): number {
+function mineCountFor(board: Board, cell: Cell): number {
   return neighborsOf(board, cell.x, cell.y).filter((c) => c.isMine).length;
 }
 
-function flagCountFor(board: Board["board"], cell: Cell): number {
+function flagCountFor(board: Board, cell: Cell): number {
   return neighborsOf(board, cell.x, cell.y).filter((c) => c.isFlagged).length;
 }
 
-function open(board: Board["board"], x: number, y: number) {
+function open(board: Board, x: number, y: number) {
   return board.with(y, board[y].with(x, { ...board[y][x], isOpen: true }));
 }
 
 function expand(
-  board: Board["board"],
+  board: Board,
   x: number,
   y: number,
   ignore: { x: number; y: number }[] = []
-): Board["board"] {
+): Board {
   let neighbors = neighborsOf(board, x, y)
     .filter((cell) => !ignore.some((c) => c.x === cell.x && c.y === cell.y))
     .filter((cell) => !cell.isFlagged);
@@ -116,7 +117,10 @@ export type BoardAction =
     }
   | { type: "click"; cell: Types.Cell };
 
-function boardReducer({ board, status }: Board, action: BoardAction): Board {
+function boardReducer(
+  { board, status }: BoardState,
+  action: BoardAction
+): BoardState {
   switch (action.type) {
     case "open":
       return {
