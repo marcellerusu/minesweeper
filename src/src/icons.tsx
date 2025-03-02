@@ -5,6 +5,9 @@ export function Svg({ children }: { children: React.ReactNode }) {
   return <svg viewBox="0 0 10 10">{children}</svg>;
 }
 
+// these SVGs have been hand crafted / written by Marcelle Rusu
+// it took a lot of time, and i'm proud of these numbers
+
 export default {
   1: (
     <polygon
