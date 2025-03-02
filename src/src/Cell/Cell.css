@@ -6,6 +6,55 @@
   border: var(--border-size) outset black;
 }
 
+.cell[data-is-open="true"] {
+  animation: flash_green 300ms ease-in-out;
+  svg {
+    animation: pop 100ms ease-in-out;
+  }
+}
+
+@keyframes flash_green {
+  0% {
+    background-color: grey;
+  }
+
+  50% {
+    background-color: rgb(106, 134, 106);
+  }
+
+  100% {
+    background-color: grey;
+  }
+}
+
+@keyframes pop {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.05);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes pop_big {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.1);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
 .cell[data-is-open="false"] {
   &:hover {
     cursor: pointer;
@@ -43,6 +92,10 @@
 
 .cell[data-is-open="false"] svg {
   display: none;
+}
+
+.cell[data-is-flagged="true"] svg {
+  animation: pop_big 100ms ease-in-out;
 }
 
 .cell[data-is-flagged="true"] svg:has(.flag) {
