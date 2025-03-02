@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useReducer, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import type * as Types from "./types";
 import type { Point } from "./types";
 import Cell from "./Cell/Cell";
@@ -133,13 +133,16 @@ function handleSpace(board: Types.Board, mouse: Point): Types.Board {
   let cell = board.flat().find((c) => c.x === x && c.y === y);
   if (!cell) return board;
 
-  if (cell.isOpen && mineCountFor(board, cell) === flagCountFor(board, cell))
+  if (cell.isOpen && mineCountFor(board, cell) === flagCountFor(board, cell)) {
     return expand(board, cell);
-  else
+  } else if (!cell.isOpen) {
     return board.with(
       y,
       board[y].with(x, { ...cell, isFlagged: !cell.isFlagged })
     );
+  } else {
+    return board;
+  }
 }
 
 export type BoardAction =
