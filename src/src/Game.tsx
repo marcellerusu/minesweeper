@@ -105,10 +105,7 @@ function handleClick(
     case "initial":
       board = generateMinesFor(board, cell);
       board = open(board, cell);
-      return {
-        board: expand(board, cell),
-        status: "active",
-      };
+      return { board: expand(board, cell), status: "active" };
     case "active":
       if (cell.isMine) {
         return { board: open(board, cell), status };
