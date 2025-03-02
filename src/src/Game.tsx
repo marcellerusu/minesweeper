@@ -31,11 +31,7 @@ function emptyBoard(): BoardState {
   };
 }
 
-function generateMinesFor(
-  board: Types.Board,
-  openingX: number,
-  openingY: number
-): Types.Board {
+function generateMinesFor(board: Types.Board, opening: Types.Point) {
   let newBoard = board;
   let numberOfMinesLeft = TOTAL_MINES;
   while (numberOfMinesLeft > 0) {
@@ -43,7 +39,7 @@ function generateMinesFor(
     let mineX = Math.floor(Math.random() * WIDTH);
     let mineY = Math.floor(Math.random() * HEIGHT);
     // ensure that you always start with a wide open first move
-    if (Math.abs(mineX - openingX) <= 1 && Math.abs(mineY - openingY) <= 1)
+    if (Math.abs(mineX - opening.x) <= 1 && Math.abs(mineY - opening.y) <= 1)
       continue;
     if (newBoard[mineY][mineX].isMine) continue;
     newBoard = newBoard.with(
@@ -82,22 +78,21 @@ function neighborsOf(
   ].filter((item) => typeof item !== "undefined");
 }
 
-function mineCountFor(board: Types.Board, cell: Cell): number {
-  return neighborsOf(board, cell.x, cell.y).filter((c) => c.isMine).length;
+function mineCountFor(board: Types.Board, { x, y }: Types.Point): number {
+  return neighborsOf(board, x, y).filter((c) => c.isMine).length;
 }
 
-function flagCountFor(board: Types.Board, cell: Cell): number {
-  return neighborsOf(board, cell.x, cell.y).filter((c) => c.isFlagged).length;
+function flagCountFor(board: Types.Board, { x, y }: Types.Point): number {
+  return neighborsOf(board, x, y).filter((c) => c.isFlagged).length;
 }
 
-function open(board: Types.Board, x: number, y: number) {
+function open(board: Types.Board, { x, y }: Types.Point) {
   return board.with(y, board[y].with(x, { ...board[y][x], isOpen: true }));
 }
 
 function expand(
   board: Types.Board,
-  x: number,
-  y: number,
+  { x, y }: Types.Point,
   ignore: { x: number; y: number }[] = []
 ): Types.Board {
   let neighbors = neighborsOf(board, x, y)
@@ -107,9 +102,8 @@ function expand(
   ignore = [...ignore, { x, y }, ...neighbors];
 
   for (let cell of neighbors) {
-    board = open(board, cell.x, cell.y);
-    if (mineCountFor(board, cell) === 0)
-      board = expand(board, cell.x, cell.y, ignore);
+    board = open(board, cell);
+    if (mineCountFor(board, cell) === 0) board = expand(board, cell, ignore);
   }
 
   return board;
@@ -121,20 +115,19 @@ function handleClick(
 ): BoardState {
   switch (status) {
     case "initial":
-      board = generateMinesFor(board, cell.x, cell.y);
-      board = open(board, cell.x, cell.y);
+      board = generateMinesFor(board, cell);
+      board = open(board, cell);
       return {
-        board: expand(board, cell.x, cell.y),
+        board: expand(board, cell),
         status: "active",
       };
     case "active":
       if (cell.isMine) {
-        return { board: open(board, cell.x, cell.y), status };
+        return { board: open(board, cell), status };
       } else if (!cell.isOpen) {
-        board = open(board, cell.x, cell.y);
+        board = open(board, cell);
 
-        if (mineCountFor(board, cell) === 0)
-          board = expand(board, cell.x, cell.y);
+        if (mineCountFor(board, cell) === 0) board = expand(board, cell);
 
         return { board, status };
       } else {
@@ -160,7 +153,7 @@ function handleSpace(
   if (!cell) return board;
 
   if (cell.isOpen && mineCountFor(board, cell) === flagCountFor(board, cell))
-    return expand(board, cell.x, cell.y);
+    return expand(board, cell);
   else
     return board.with(
       cell.y,
@@ -172,21 +165,14 @@ function handleSpace(
 }
 
 export type BoardAction =
-  | {
-      type: "open";
-      x: number;
-      y: number;
-    }
-  | {
-      type: "space";
-      mouse: { x: number; y: number };
-    }
+  | { type: "open"; x: number; y: number }
+  | { type: "space"; mouse: { x: number; y: number } }
   | { type: "click"; cell: Types.Cell };
 
 function boardReducer(state: BoardState, action: BoardAction): BoardState {
   switch (action.type) {
     case "open":
-      return { ...state, board: open(state.board, action.x, action.y) };
+      return { ...state, board: open(state.board, action) };
     case "click":
       return handleClick(state, action.cell);
     case "space":
