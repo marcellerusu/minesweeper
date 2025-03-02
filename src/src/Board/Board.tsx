@@ -1,9 +1,9 @@
 import "./Board.css";
 import React, { useEffect, useState } from "react";
-import type { Cell as CellType } from "../types";
+import type * as Types from "../types";
 import Cell from "../Cell/Cell";
 
-type Board = CellType[][];
+type Board = Types.Cell[][];
 
 function emptyBoard(width: number, height: number): Board {
   return Array.from({ length: height }, (_, y) =>
