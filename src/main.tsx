@@ -2,14 +2,10 @@ import "./style.css";
 
 import React, { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import Board from "./src/Board/Board";
-
-function App() {
-  return <Board />;
-}
+import Game from "./src/Game";
 
 createRoot(document.getElementById("app")!).render(
   <StrictMode>
-    <App />
+    <Game />
   </StrictMode>
 );
