@@ -1,27 +1,16 @@
 import "./Board.css";
-import React, { Dispatch } from "react";
+import React, { useContext } from "react";
 import Cell from "../Cell/Cell";
-import type * as Types from "../types";
-import type { BoardAction } from "../Game";
+import { BoardContext } from "../state";
 
-type Props = {
-  board: Types.Board;
-  mineCountFor: (board: Types.Board, cell: Types.Cell) => number;
-  dispatch: Dispatch<BoardAction>;
-};
-
-function Board({ board, dispatch, mineCountFor }: Props) {
+function Board() {
+  let [{ board }] = useContext(BoardContext);
   return (
     <div className="board">
       {board.map((row, y) => (
         <span key={`row-${y}`}>
           {row.map((cell) => (
-            <Cell
-              key={`cell-${cell.x}-${cell.y}`}
-              cell={cell}
-              dispatch={dispatch}
-              mineCount={mineCountFor(board, cell)}
-            />
+            <Cell key={`cell-${cell.x}-${cell.y}`} cell={cell} />
           ))}
         </span>
       ))}

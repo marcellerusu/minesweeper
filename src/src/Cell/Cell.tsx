@@ -1,16 +1,13 @@
 import "./Cell.css";
 import type { Cell } from "../types";
-import type { BoardAction } from "../Game";
-import React, { Dispatch } from "react";
+import React, { useContext } from "react";
 import ICONS, { Svg } from "../icons";
+import { BoardContext, mineCountFor } from "../state";
 
-type Props = {
-  cell: Cell;
-  mineCount: number;
-  dispatch: Dispatch<BoardAction>;
-};
+function Cell({ cell }: { cell: Cell }) {
+  let [{ board }, dispatch] = useContext(BoardContext);
+  let mineCount = mineCountFor(board, cell);
 
-function Cell({ cell, mineCount, dispatch }: Props) {
   return (
     <div
       onMouseDown={() => dispatch({ type: "click", cell })}

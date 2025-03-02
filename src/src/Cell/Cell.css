@@ -10,8 +10,6 @@
   &:hover {
     cursor: pointer;
     filter: contrast(0.8);
-    /* border-color: #aaa;
-    background-color: #888; */
   }
   &:active {
     cursor: pointer;
