@@ -87,12 +87,14 @@ function expand(
 
   ignore = [...ignore, cell, ...neighbors];
 
-  for (let cell of neighbors) {
+  return neighbors.reduce((board, cell) => {
     board = open(board, cell);
-    if (mineCountFor(board, cell) === 0) board = expand(board, cell, ignore);
-  }
-
-  return board;
+    if (mineCountFor(board, cell) === 0) {
+      return expand(board, cell, ignore);
+    } else {
+      return board;
+    }
+  }, board);
 }
 
 function handleClick(
