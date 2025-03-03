@@ -1,0 +1,97 @@
+svg.seven-segment {
+  display: flex;
+  width: 30px;
+  height: auto;
+}
+
+svg[data-number="9"] {
+  polygon {
+    fill: #a00;
+  }
+  polygon:is(.bottom-left, .bottom) {
+    fill: rgb(35, 1, 1);
+  }
+}
+
+svg[data-number="8"] polygon {
+  fill: #a00;
+}
+
+svg[data-number="7"] {
+  polygon {
+    fill: rgb(35, 1, 1);
+  }
+  polygon:is(.top, .top-right, .bottom-right) {
+    fill: #a00;
+  }
+}
+
+svg[data-number="6"] {
+  polygon {
+    fill: rgb(35, 1, 1);
+  }
+  polygon:is(.top, .top-left, .bottom-left, .bottom, .bottom-right, .center) {
+    fill: #a00;
+  }
+}
+
+svg[data-number="5"] {
+  polygon {
+    fill: rgb(35, 1, 1);
+  }
+  polygon:is(.top, .top-left, .bottom, .bottom-right, .center) {
+    fill: #a00;
+  }
+}
+
+svg[data-number="4"] {
+  polygon {
+    fill: rgb(35, 1, 1);
+  }
+  polygon:is(.top-left, .top-right, .bottom-right, .center) {
+    fill: #a00;
+  }
+}
+
+svg[data-number="3"] {
+  polygon {
+    fill: rgb(35, 1, 1);
+  }
+  polygon:is(.top, .top-right, .bottom-right, .center, .bottom) {
+    fill: #a00;
+  }
+}
+
+svg[data-number="2"] {
+  polygon {
+    fill: rgb(35, 1, 1);
+  }
+  polygon:is(.top, .top-right, .bottom-left, .center, .bottom) {
+    fill: #a00;
+  }
+}
+
+svg[data-number="1"] {
+  polygon {
+    fill: rgb(35, 1, 1);
+  }
+  polygon:is(.top-right, .bottom-right) {
+    fill: #a00;
+  }
+}
+
+svg[data-number="0"] {
+  polygon {
+    fill: rgb(35, 1, 1);
+  }
+  polygon:is(
+      .top,
+      .top-right,
+      .bottom-right,
+      .bottom,
+      .bottom-left,
+      .top-left
+    ) {
+    fill: #a00;
+  }
+}

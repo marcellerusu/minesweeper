@@ -1,3 +1,5 @@
+import "./Timer.css";
+import SevenSegmentDigit from "./SevenSegmentDigit";
 import React, { useEffect, useState } from "react";
 
 function Timer({ status }: { status: "playing" | "stopped" | "reset" }) {
@@ -18,7 +20,15 @@ function Timer({ status }: { status: "playing" | "stopped" | "reset" }) {
     };
   }, [status]);
 
-  return <div className="timer">{time}</div>;
+  let [a, b, c] = time.toString().padStart(3, "0").split("").map(Number);
+
+  return (
+    <div className="timer">
+      <SevenSegmentDigit number={a} />
+      <SevenSegmentDigit number={b} />
+      <SevenSegmentDigit number={c} />
+    </div>
+  );
 }
 
 export default Timer;
