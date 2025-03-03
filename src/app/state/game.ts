@@ -113,6 +113,7 @@ let gameSlice = createSlice({
     click(state, action: { payload: Point }) {
       let { x, y } = action.payload;
       let cell = state.board[y][x]!;
+      if (cell.isFlagged) return;
       switch (state.status) {
         case "initial":
           generateMinesFor(state.board, cell);
