@@ -12,10 +12,15 @@ function Game() {
   );
   let isGameWon = useSelector(({ game: { board } }: RootState) =>
     board.every((row) =>
-      row.every(
-        (cell) =>
-          ((cell.isMine || cell.isFlagged) && !cell.isOpen) || cell.isOpen
-      )
+      row.every((cell) => {
+        if (cell.isFlagged) {
+          return cell.isMine;
+        } else if (cell.isMine) {
+          return !cell.isOpen;
+        } else {
+          return cell.isOpen;
+        }
+      })
     )
   );
 
