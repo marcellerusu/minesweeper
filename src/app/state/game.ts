@@ -168,10 +168,19 @@ let gameSlice = createSlice({
         cell.isFlagged = !cell.isFlagged;
       }
     },
+
+    reset(state) {
+      for (let cell of state.board.flat()) {
+        cell.isOpen = false;
+        cell.isFlagged = false;
+        cell.isMine = false;
+      }
+      state.status = "initial";
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { click, space } = gameSlice.actions;
+export const { click, space, reset } = gameSlice.actions;
 
 export default gameSlice.reducer;

@@ -2,11 +2,15 @@ import "./Game.css";
 import React, { useEffect } from "react";
 import Board from "./Board/Board";
 import { useDispatch, useSelector } from "react-redux";
-import { space } from "./state/game";
+import { reset, space } from "./state/game";
 import { RootState } from "./store";
+import Timer from "./Timer/Timer";
 
 function Game() {
   let dispatch = useDispatch();
+  let isEmpty = useSelector(({ game: { board } }: RootState) =>
+    board.every((row) => row.every((cell) => !cell.isOpen))
+  );
   let isGameLost = useSelector(({ game: { board } }: RootState) =>
     board.some((row) => row.some((cell) => cell.isMine && cell.isOpen))
   );
@@ -44,11 +48,25 @@ function Game() {
     };
   }, []);
 
+  let status: "stopped" | "playing" | "reset";
+  if (isEmpty) status = "reset";
+  else if (isGameLost || isGameWon) status = "stopped";
+  else status = "playing";
+
   return (
     <div className="game">
+      <Timer status={status} />
       <Board />
-      {isGameLost && <span className="game-over-msg">You lost</span>}
-      {isGameWon && <span className="game-won-msg">You won</span>}
+      {isGameLost && (
+        <span onClick={() => dispatch(reset())} className="game-over-msg">
+          You lost
+        </span>
+      )}
+      {isGameWon && (
+        <span onClick={() => dispatch(reset())} className="game-won-msg">
+          You won
+        </span>
+      )}
     </div>
   );
 }
