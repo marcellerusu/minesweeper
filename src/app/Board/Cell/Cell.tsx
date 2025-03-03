@@ -10,11 +10,11 @@ import { RootState } from "../../store";
 
 function Cell({ x, y }: Point) {
   let cell = useSelector(
-    (state: RootState) =>
-      state.board.board.flat().find((cell) => cell.x === x && cell.y === y)!
+    ({ game: { board } }: RootState) =>
+      board.flat().find((cell) => cell.x === x && cell.y === y)!
   );
-  let mineCount = useSelector((state: RootState) =>
-    mineCountFor(state.board.board, cell)
+  let mineCount = useSelector(({ game: { board } }: RootState) =>
+    mineCountFor(board, cell)
   );
   let dispatch = useDispatch();
   return (

@@ -6,7 +6,7 @@ const WIDTH = 9,
   HEIGHT = 9,
   TOTAL_MINES = 9;
 
-type BoardState = {
+type GameState = {
   board: Cell[][];
   status: "initial" | "active";
 };
@@ -15,7 +15,7 @@ function emptyCell(x: number, y: number): Cell {
   return { isMine: false, isOpen: false, isFlagged: false, x, y };
 }
 
-export function emptyBoard(): BoardState {
+export function emptyGame(): GameState {
   return {
     board: Array.from({ length: HEIGHT }, (_, y) =>
       Array.from({ length: WIDTH }, (_, x) => emptyCell(x, y))
@@ -90,7 +90,7 @@ function flagCountFor(board: Board, cell: Point): number {
 function expand(board: Board, cell: Point, ignore: Point[] = []) {
   let neighbors = neighborsOf(board, cell)
     .filter((a) => !ignore.some((b) => b.x === a.x && b.y === a.y))
-    .filter(({ isFlagged }) => !isFlagged);
+    .filter(({ isFlagged, isOpen }) => !isFlagged && !isOpen);
 
   ignore = [...ignore, cell, ...neighbors];
 
@@ -100,9 +100,9 @@ function expand(board: Board, cell: Point, ignore: Point[] = []) {
   }
 }
 
-let boardSlice = createSlice({
+let gameSlice = createSlice({
   name: "board",
-  initialState: emptyBoard(),
+  initialState: emptyGame(),
   reducers: {
     /**
      * # handle cell click
@@ -171,6 +171,6 @@ let boardSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { click, space } = boardSlice.actions;
+export const { click, space } = gameSlice.actions;
 
-export default boardSlice.reducer;
+export default gameSlice.reducer;
