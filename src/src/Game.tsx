@@ -12,7 +12,10 @@ function Game() {
       mouse.y = e.clientY;
     }
     function onKeydown(e: KeyboardEvent) {
-      if (e.key === " ") dispatch({ type: "space", mouse });
+      if (e.key === " ") {
+        e.preventDefault();
+        dispatch({ type: "space", mouse });
+      }
     }
     window.addEventListener("mousemove", trackMouse);
     window.addEventListener("keydown", onKeydown);
