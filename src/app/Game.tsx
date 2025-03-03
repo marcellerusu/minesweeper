@@ -1,9 +1,10 @@
-import React, { useEffect, useReducer } from "react";
+import React, { useEffect } from "react";
 import Board from "./Board/Board";
-import { BoardContext, boardReducer, emptyBoard } from "./state";
+import { useDispatch } from "react-redux";
+import { space } from "./state/game";
 
 function Game() {
-  let [state, dispatch] = useReducer(boardReducer, emptyBoard());
+  let dispatch = useDispatch();
 
   useEffect(() => {
     let mouse = { x: 0, y: 0 };
@@ -14,7 +15,7 @@ function Game() {
     function onKeydown(e: KeyboardEvent) {
       if (e.key === " ") {
         e.preventDefault();
-        dispatch({ type: "space", mouse });
+        dispatch(space({ mouse }));
       }
     }
     window.addEventListener("mousemove", trackMouse);
@@ -25,11 +26,7 @@ function Game() {
     };
   }, []);
 
-  return (
-    <BoardContext.Provider value={[state, dispatch]}>
-      <Board />
-    </BoardContext.Provider>
-  );
+  return <Board />;
 }
 
 export default Game;
