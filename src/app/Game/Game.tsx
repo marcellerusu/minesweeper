@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { reset, space } from "./state/game";
-import { RootState } from "./store";
+import { reset, space } from "../state/game";
+import { RootState } from "../store";
 import Board from "./Board/Board";
 import Header from "./Header/Header";
 import "./Game.css";
