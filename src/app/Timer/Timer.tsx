@@ -23,6 +23,8 @@ function Timer({ status }: { status: "playing" | "stopped" | "reset" }) {
     };
   }, [status]);
 
+  // convert time from number 123 -> [1, 2, 3],
+  // taking into account for smaller numbers like 1 -> [0, 0, 1]
   let [a, b, c] = time.toString().padStart(3, "0").split("").map(Number);
 
   return (
