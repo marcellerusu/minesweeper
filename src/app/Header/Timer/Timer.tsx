@@ -1,5 +1,5 @@
 import "./Timer.css";
-import SevenSegmentDigit from "./SevenSegmentDigit";
+import SevenSegmentDigit from "@/shared/SevenSegmentDigit/SevenSegmentDigit";
 import React, { useEffect, useState } from "react";
 
 function Timer({ status }: { status: "playing" | "stopped" | "reset" }) {

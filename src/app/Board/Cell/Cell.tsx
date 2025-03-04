@@ -1,12 +1,12 @@
 import "./Cell.css";
-import type { Cell, Point } from "../../types";
+import type { Cell, Point } from "@/app/types";
 import React from "react";
 import ICONS, { Svg } from "./icons";
 import { useDispatch } from "react-redux";
-import { click } from "../../state/game";
+import { click } from "@/app/state/game";
 import { useSelector } from "react-redux";
-import { mineCountFor } from "../../state/game";
-import { RootState } from "../../store";
+import { mineCountFor } from "@/app/state/game";
+import { RootState } from "@/app/store";
 
 function Cell({ x, y }: Point) {
   let cell = useSelector(

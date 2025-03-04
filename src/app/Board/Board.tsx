@@ -2,7 +2,7 @@ import "./Board.css";
 import React from "react";
 import Cell from "./Cell/Cell";
 import { useSelector } from "react-redux";
-import { RootState } from "../store";
+import { RootState } from "@/app/store";
 
 function Board() {
   let height = useSelector(({ game: { board } }: RootState) => board.length);

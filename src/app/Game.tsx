@@ -4,7 +4,7 @@ import Board from "./Board/Board";
 import { useDispatch, useSelector } from "react-redux";
 import { reset, space } from "./state/game";
 import { RootState } from "./store";
-import Timer from "./Timer/Timer";
+import Header from "./Header/Header";
 
 function Game() {
   let dispatch = useDispatch();
@@ -55,7 +55,7 @@ function Game() {
 
   return (
     <div className="game">
-      <Timer status={status} />
+      <Header status={status} />
       <Board />
       {isGameLost && (
         <span onClick={() => dispatch(reset())} className="game-over-msg">
