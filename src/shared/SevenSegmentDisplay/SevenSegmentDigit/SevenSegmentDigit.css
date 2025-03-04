@@ -84,16 +84,10 @@ svg[data-number="1"] {
 
 svg[data-number="0"] {
   polygon {
-    fill: var(--off-color);
-  }
-  polygon:is(
-      .top,
-      .top-right,
-      .bottom-right,
-      .bottom,
-      .bottom-left,
-      .top-left
-    ) {
     fill: var(--on-color);
+  }
+
+  polygon:is(.center) {
+    fill: var(--off-color);
   }
 }
