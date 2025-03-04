@@ -15,11 +15,15 @@ function Cell({ x, y, isGameWon }: Point & { isGameWon: boolean }) {
   let mineCount = useSelector(({ game: { board } }: RootState) =>
     mineCountFor(board, cell)
   );
+  let position = useSelector(({ game: { position } }: RootState) => {
+    if (position?.x === x && position?.y === y) return position;
+  });
   let dispatch = useDispatch();
   return (
     <div
       onMouseDown={() => dispatch(click(cell))}
       className="cell"
+      data-is-active={position?.x === x && position?.y === y}
       data-is-open={cell.isOpen}
       // the game can be over with unflagged cells
       // these are all the mines, so we'll flag it to make it

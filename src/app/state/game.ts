@@ -13,6 +13,7 @@ type GameState = {
     numberOfMines: number;
     difficulty: "beginner" | "intermediate" | "expert";
   };
+  position: Point | null;
   status: "initial" | "active";
 };
 
@@ -32,6 +33,7 @@ export function emptyGame({
     ),
     status: "initial",
     settings: { width, height, numberOfMines, difficulty },
+    position: null,
   };
 }
 
@@ -134,6 +136,7 @@ let gameSlice = createSlice({
     click(state, action: { payload: Point }) {
       let { x, y } = action.payload;
       let cell = state.board[y][x]!;
+      state.position = { x, y };
       if (cell.isFlagged) return;
       switch (state.status) {
         case "initial":
@@ -158,24 +161,10 @@ let gameSlice = createSlice({
      * - open the neighboring mines (if the cell is open, and # flag == mine count for cell)
      * - flag/unflag the cell (if the cell is unopened)
      */
-    space(state, action: { payload: { mouse: Point } }) {
-      let { mouse } = action.payload;
-      // get the cell dom element based on current mouse position
-      let cellHtml = document
-        .elementsFromPoint(mouse.x, mouse.y)
-        .find((elem) =>
-          elem.matches(".cell[data-x][data-y]")
-        ) as HTMLDivElement;
+    space(state) {
+      if (!state.position) return;
 
-      // in case the mouse isn't on top of a cell
-      if (!cellHtml) return;
-
-      // guaranteed to exist since the .matches(".cell[data-x][data-y]")
-      let x = Number(cellHtml.dataset.x),
-        y = Number(cellHtml.dataset.y);
-
-      // find the cell in react state <- if it doesn't exist, we got a big problem
-      // it is better to crash than ignore the issue here
+      let { x, y } = state.position;
       let cell = state.board.flat().find((c) => c.x === x && c.y === y)!;
 
       if (cell.isOpen) {
@@ -187,6 +176,31 @@ let gameSlice = createSlice({
         }
       } else {
         cell.isFlagged = !cell.isFlagged;
+      }
+    },
+
+    movePosition(state, action: { payload: "left" | "right" | "up" | "down" }) {
+      if (!state.position) return;
+
+      switch (action.payload) {
+        case "left":
+          state.position.x = Math.max(state.position.x - 1, 0);
+          break;
+        case "right":
+          state.position.x = Math.min(
+            state.position.x + 1,
+            state.settings.width - 1
+          );
+          break;
+        case "up":
+          state.position.y = Math.max(state.position.y - 1, 0);
+          break;
+        case "down":
+          state.position.y = Math.min(
+            state.position.y + 1,
+            state.settings.height - 1
+          );
+          break;
       }
     },
 
@@ -231,10 +245,15 @@ let gameSlice = createSlice({
       state.settings.difficulty = action.payload;
       state.status = "initial";
     },
+
+    hover(state, { payload }: { payload: Point }) {
+      state.position = payload;
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { click, space, reset, changeDifficulty } = gameSlice.actions;
+export const { click, space, reset, changeDifficulty, movePosition, hover } =
+  gameSlice.actions;
 
 export default gameSlice.reducer;
