@@ -1,12 +1,8 @@
 import React, { useEffect, useState } from "react";
-import SevenSegmentDigit from "@/shared/SevenSegmentDigit/SevenSegmentDigit";
-import "./Timer.css";
+import SevenSegmentDisplay from "@/shared/SevenSegmentDisplay/SevenSegmentDisplay";
 
 function Timer({ status }: { status: "playing" | "stopped" | "reset" }) {
   let [time, setTimer] = useState(0);
-
-  // s/o to minesweeperonline.com
-  time = Math.min(time, 999);
 
   // this code is kind of nasty to handle game status changes
   //   - if you won, or lost -> stop the timer
@@ -26,17 +22,7 @@ function Timer({ status }: { status: "playing" | "stopped" | "reset" }) {
     };
   }, [status]);
 
-  // convert time from number 123 -> [1, 2, 3],
-  // taking into account for smaller numbers like 1 -> [0, 0, 1]
-  let [a, b, c] = time.toString().padStart(3, "0").split("").map(Number);
-
-  return (
-    <div className="timer">
-      <SevenSegmentDigit number={a} />
-      <SevenSegmentDigit number={b} />
-      <SevenSegmentDigit number={c} />
-    </div>
-  );
+  return <SevenSegmentDisplay number={Math.min(time, 999)} />;
 }
 
 export default Timer;
