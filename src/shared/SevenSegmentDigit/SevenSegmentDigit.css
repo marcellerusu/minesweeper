@@ -1,88 +1,90 @@
 svg.seven-segment {
   display: flex;
-  width: 30px;
+  width: calc(var(--cell-size) * 0.6);
   height: auto;
+  --on-color: #a00;
+  --off-color: #230101;
 }
 
 svg[data-number="9"] {
   polygon {
-    fill: #a00;
+    fill: var(--on-color);
   }
   polygon:is(.bottom-left, .bottom) {
-    fill: rgb(35, 1, 1);
+    fill: var(--off-color);
   }
 }
 
 svg[data-number="8"] polygon {
-  fill: #a00;
+  fill: var(--on-color);
 }
 
 svg[data-number="7"] {
   polygon {
-    fill: rgb(35, 1, 1);
+    fill: var(--off-color);
   }
   polygon:is(.top, .top-right, .bottom-right) {
-    fill: #a00;
+    fill: var(--on-color);
   }
 }
 
 svg[data-number="6"] {
   polygon {
-    fill: rgb(35, 1, 1);
+    fill: var(--off-color);
   }
   polygon:is(.top, .top-left, .bottom-left, .bottom, .bottom-right, .center) {
-    fill: #a00;
+    fill: var(--on-color);
   }
 }
 
 svg[data-number="5"] {
   polygon {
-    fill: rgb(35, 1, 1);
+    fill: var(--off-color);
   }
   polygon:is(.top, .top-left, .bottom, .bottom-right, .center) {
-    fill: #a00;
+    fill: var(--on-color);
   }
 }
 
 svg[data-number="4"] {
   polygon {
-    fill: rgb(35, 1, 1);
+    fill: var(--off-color);
   }
   polygon:is(.top-left, .top-right, .bottom-right, .center) {
-    fill: #a00;
+    fill: var(--on-color);
   }
 }
 
 svg[data-number="3"] {
   polygon {
-    fill: rgb(35, 1, 1);
+    fill: var(--off-color);
   }
   polygon:is(.top, .top-right, .bottom-right, .center, .bottom) {
-    fill: #a00;
+    fill: var(--on-color);
   }
 }
 
 svg[data-number="2"] {
   polygon {
-    fill: rgb(35, 1, 1);
+    fill: var(--off-color);
   }
   polygon:is(.top, .top-right, .bottom-left, .center, .bottom) {
-    fill: #a00;
+    fill: var(--on-color);
   }
 }
 
 svg[data-number="1"] {
   polygon {
-    fill: rgb(35, 1, 1);
+    fill: var(--off-color);
   }
   polygon:is(.top-right, .bottom-right) {
-    fill: #a00;
+    fill: var(--on-color);
   }
 }
 
 svg[data-number="0"] {
   polygon {
-    fill: rgb(35, 1, 1);
+    fill: var(--off-color);
   }
   polygon:is(
       .top,
@@ -92,6 +94,6 @@ svg[data-number="0"] {
       .bottom-left,
       .top-left
     ) {
-    fill: #a00;
+    fill: var(--on-color);
   }
 }
