@@ -8,7 +8,10 @@ function Timer({ status }: { status: "playing" | "stopped" | "reset" }) {
   // s/o to minesweeperonline.com
   time = Math.min(time, 999);
 
-  // this code is kind of nasty
+  // this code is kind of nasty to handle game status changes
+  //   - if you won, or lost -> stop the timer
+  //   - if you started a new game -> reset to 0, but pause the timer
+  //   - if you put your first move -> start the timer
   useEffect(() => {
     if (status === "reset") setTimer(0);
     let interval = setInterval(() => {
