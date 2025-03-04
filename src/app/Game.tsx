@@ -56,7 +56,7 @@ function Game() {
   return (
     <div className="game">
       <Header status={status} />
-      <Board />
+      <Board isGameWon={isGameWon} />
       {isGameLost && (
         <span onClick={() => dispatch(reset())} className="game-over-msg">
           You lost

@@ -8,7 +8,7 @@ import { useSelector } from "react-redux";
 import { mineCountFor } from "@/app/state/game";
 import { RootState } from "@/app/store";
 
-function Cell({ x, y }: Point) {
+function Cell({ x, y, isGameWon }: Point & { isGameWon: boolean }) {
   let cell = useSelector(
     ({ game: { board } }: RootState) =>
       board.flat().find((cell) => cell.x === x && cell.y === y)!
@@ -22,7 +22,10 @@ function Cell({ x, y }: Point) {
       onMouseDown={() => dispatch(click(cell))}
       className="cell"
       data-is-open={cell.isOpen}
-      data-is-flagged={cell.isFlagged}
+      // the game can be over with unflagged cells
+      // these are all the mines, so we'll flag it to make it
+      // visually appealing
+      data-is-flagged={cell.isFlagged || (isGameWon && !cell.isOpen)}
       data-is-mine={cell.isMine}
       data-x={cell.x}
       data-y={cell.y}
