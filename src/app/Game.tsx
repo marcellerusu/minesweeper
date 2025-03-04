@@ -1,10 +1,10 @@
-import "./Game.css";
 import React, { useEffect } from "react";
-import Board from "./Board/Board";
 import { useDispatch, useSelector } from "react-redux";
 import { reset, space } from "./state/game";
 import { RootState } from "./store";
+import Board from "./Board/Board";
 import Header from "./Header/Header";
+import "./Game.css";
 
 function Game() {
   let dispatch = useDispatch();

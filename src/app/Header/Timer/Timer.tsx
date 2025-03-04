@@ -1,6 +1,6 @@
-import "./Timer.css";
-import SevenSegmentDigit from "@/shared/SevenSegmentDigit/SevenSegmentDigit";
 import React, { useEffect, useState } from "react";
+import SevenSegmentDigit from "@/shared/SevenSegmentDigit/SevenSegmentDigit";
+import "./Timer.css";
 
 function Timer({ status }: { status: "playing" | "stopped" | "reset" }) {
   let [time, setTimer] = useState(0);

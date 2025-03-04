@@ -1,10 +1,9 @@
-import "./style.css";
-
 import React, { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
-import Game from "./app/Game";
-import { store } from "./app/store";
 import { Provider } from "react-redux";
+import { createRoot } from "react-dom/client";
+import { store } from "./app/store";
+import Game from "./app/Game";
+import "./style.css";
 
 createRoot(document.getElementById("app")!).render(
   <StrictMode>

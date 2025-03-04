@@ -1,8 +1,8 @@
-import "./MineCounter.css";
 import React from "react";
-import SevenSegmentDigit from "@/shared/SevenSegmentDigit/SevenSegmentDigit";
 import { useSelector } from "react-redux";
+import SevenSegmentDigit from "@/shared/SevenSegmentDigit/SevenSegmentDigit";
 import { RootState } from "@/app/store";
+import "./MineCounter.css";
 
 function MineCounter() {
   let numberOfFlags = useSelector(

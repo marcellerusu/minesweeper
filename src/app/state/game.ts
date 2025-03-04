@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import type { Cell, Board } from "@/app/types";
-import type { Point } from "@/app/types";
+import type { Cell, Board, Point } from "@/app/types";
 
 const WIDTH = 9,
   HEIGHT = 9,
