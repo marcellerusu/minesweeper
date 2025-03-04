@@ -5,6 +5,9 @@ import React, { useEffect, useState } from "react";
 function Timer({ status }: { status: "playing" | "stopped" | "reset" }) {
   let [time, setTimer] = useState(0);
 
+  // s/o to minesweeperonline.com
+  time = Math.min(time, 999);
+
   // this code is kind of nasty
   useEffect(() => {
     if (status === "reset") setTimer(0);

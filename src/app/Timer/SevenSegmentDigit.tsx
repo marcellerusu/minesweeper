@@ -12,7 +12,7 @@ function SevenSegmentDigit({ number }: { number: number }) {
       <polygon className="bottom-right" points="5,5.1 5,9.9 4.1,9 4.1,6.1" />
       <polygon
         className="center"
-        points="0.2,5.1  0.2,4.9 1,4.5 4,4.5 4.8,4.9 4.8,5.1 4,5.5 1,5.5"
+        points="0.2,5.1 0.2,4.9 1,4.5 4,4.5 4.8,4.9 4.8,5.1 4,5.5 1,5.5"
       />
     </svg>
   );
