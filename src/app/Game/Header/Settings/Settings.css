@@ -1,7 +1,6 @@
 .settings-icon {
   width: 30px;
-  /* height: 30px; */
-  /* background-color: white; */
+
   line {
     transition: all 100ms ease-in-out;
   }
@@ -20,22 +19,25 @@
   }
 }
 
+dialog {
+  width: 335px;
+  padding: 0;
+  border: none;
+}
+
+::backdrop {
+  background-color: rgba(0, 0, 0, 0.558);
+}
+
 .settings-form {
+  font-family: monospace;
+  font-size: 15px;
+  background-color: black;
+  padding: 1rem;
+  border: 0.1em solid rgb(118, 118, 118);
   h1 {
     margin-top: 0;
   }
-  font-family: monospace;
-  font-size: 15px;
-  position: absolute;
-  width: 335px;
-  height: 125px;
-  background-color: black;
-  z-index: 10;
-  padding: 1rem;
-  top: 50%;
-  left: 50%;
-  transform: translateX(-50%) translateY(-50%);
-  border: 0.1em solid rgb(118, 118, 118);
   label {
     display: flex;
     gap: 0.5em;
@@ -58,9 +60,4 @@
       font-weight: bold;
     }
   }
-}
-
-.game:has(.settings-form) :is(.board, .seven-segment-display, .settings-icon) {
-  filter: opacity(0.5);
-  pointer-events: none;
 }
