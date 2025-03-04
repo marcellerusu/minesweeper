@@ -1,5 +1,4 @@
 import React from "react";
-// viewbox = 0 0 10 10
 
 export function Svg({ children }: { children: React.ReactNode }) {
   return <svg viewBox="0 0 10 10">{children}</svg>;
