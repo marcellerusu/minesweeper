@@ -1,12 +1,18 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { Cell, Board, Point } from "@/app/types";
 
-const WIDTH = 9,
-  HEIGHT = 9,
-  TOTAL_MINES = 9;
+const DEFAULT_WIDTH = 9,
+  DEFAULT_HEIGHT = 9,
+  DEFAULT_TOTAL_MINES = 9;
 
 type GameState = {
   board: Cell[][];
+  settings: {
+    width: number;
+    height: number;
+    numberOfMines: number;
+    difficulty: "beginner" | "intermediate" | "expert";
+  };
   status: "initial" | "active";
 };
 
@@ -14,24 +20,30 @@ function emptyCell(x: number, y: number): Cell {
   return { isMine: false, isOpen: false, isFlagged: false, x, y };
 }
 
-export function emptyGame(): GameState {
+export function emptyGame({
+  width,
+  height,
+  numberOfMines,
+  difficulty,
+}: GameState["settings"]): GameState {
   return {
-    board: Array.from({ length: HEIGHT }, (_, y) =>
-      Array.from({ length: WIDTH }, (_, x) => emptyCell(x, y))
+    board: Array.from({ length: height }, (_, y) =>
+      Array.from({ length: width }, (_, x) => emptyCell(x, y))
     ),
     status: "initial",
+    settings: { width, height, numberOfMines, difficulty },
   };
 }
 
 /**
  * Given an empty board, fill it up with `TOTAL_MINES` worth of mines
  */
-function generateMinesFor(board: Board, opening: Point) {
-  let numberOfMinesLeft = TOTAL_MINES;
+function generateMinesFor({ board, settings }: GameState, opening: Point) {
+  let numberOfMinesLeft = settings.numberOfMines;
   while (numberOfMinesLeft > 0) {
     // generate a point and make sure that it doesn't exist in the board
-    let x = Math.floor(Math.random() * WIDTH),
-      y = Math.floor(Math.random() * HEIGHT);
+    let x = Math.floor(Math.random() * settings.width),
+      y = Math.floor(Math.random() * settings.height);
     // ensure that you always start with a wide open first move
     if (Math.abs(x - opening.x) <= 1 && Math.abs(y - opening.y) <= 1) continue;
     if (board[y][x].isMine) continue;
@@ -101,7 +113,17 @@ function expand(board: Board, cell: Point, ignore: Point[] = []) {
 
 let gameSlice = createSlice({
   name: "board",
-  initialState: emptyGame(),
+  initialState: emptyGame({
+    width: Number(localStorage.getItem("width") ?? DEFAULT_WIDTH),
+    height: Number(localStorage.getItem("height") ?? DEFAULT_HEIGHT),
+    numberOfMines: Number(
+      localStorage.getItem("number-of-mines") ?? DEFAULT_TOTAL_MINES
+    ),
+    difficulty:
+      (localStorage.getItem(
+        "difficulty"
+      ) as GameState["settings"]["difficulty"]) ?? "beginner",
+  }),
   reducers: {
     /**
      * # handle cell click
@@ -115,7 +137,7 @@ let gameSlice = createSlice({
       if (cell.isFlagged) return;
       switch (state.status) {
         case "initial":
-          generateMinesFor(state.board, cell);
+          generateMinesFor(state, cell);
           cell.isOpen = true;
           expand(state.board, cell);
           state.status = "active";
@@ -176,10 +198,43 @@ let gameSlice = createSlice({
       }
       state.status = "initial";
     },
+
+    changeDifficulty(
+      state,
+      action: { payload: "beginner" | "intermediate" | "expert" }
+    ) {
+      switch (action.payload) {
+        case "beginner":
+          state.settings.height = 9;
+          state.settings.width = 9;
+          state.settings.numberOfMines = 10;
+          break;
+        case "intermediate":
+          state.settings.height = 16;
+          state.settings.width = 16;
+          state.settings.numberOfMines = 40;
+          break;
+        case "expert":
+          state.settings.height = 16;
+          state.settings.width = 30;
+          state.settings.numberOfMines = 99;
+          break;
+      }
+      localStorage.setItem("width", state.settings.width.toString());
+      localStorage.setItem("height", state.settings.height.toString());
+      localStorage.setItem(
+        "number-of-mines",
+        state.settings.numberOfMines.toString()
+      );
+      localStorage.setItem("difficulty", action.payload);
+      state.board = emptyGame(state.settings).board;
+      state.settings.difficulty = action.payload;
+      state.status = "initial";
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { click, space, reset } = gameSlice.actions;
+export const { click, space, reset, changeDifficulty } = gameSlice.actions;
 
 export default gameSlice.reducer;

@@ -5,8 +5,8 @@ import { RootState } from "@/app/store";
 import Cell from "./Cell/Cell";
 
 function Board({ isGameWon }: { isGameWon: boolean }) {
-  let height = useSelector(({ game: { board } }: RootState) => board.length);
-  let width = useSelector(({ game: { board } }: RootState) => board[0].length);
+  let height = useSelector(({ game }: RootState) => game.settings.height);
+  let width = useSelector(({ game }: RootState) => game.settings.width);
   return (
     <div className="board">
       {Array.from({ length: height }).map((_, y) => (
