@@ -21,7 +21,7 @@ function Cell({ x, y, isGameWon }: Point & { isGameWon: boolean }) {
   let dispatch = useDispatch();
   return (
     <div
-      onMouseDown={() => dispatch(click(cell))}
+      onMouseDown={() => dispatch(click())}
       className="cell"
       data-is-active={position?.x === x && position?.y === y}
       data-is-open={cell.isOpen}

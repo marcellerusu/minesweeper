@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { hover, movePosition, reset, space } from "@/app/state/game";
+import { click, hover, movePosition, reset, space } from "@/app/state/game";
 import { RootState } from "@/app/store";
 import Board from "./Board/Board";
 import Header from "./Header/Header";
@@ -48,18 +48,20 @@ function Game() {
       if (e.key === " ") {
         e.preventDefault();
         dispatch(space());
+      } else if (e.metaKey) {
+        dispatch(click());
       } else if (e.key === "ArrowLeft") {
         e.preventDefault();
-        dispatch(movePosition("left"));
+        dispatch(movePosition({ dir: "left", jump: e.shiftKey }));
       } else if (e.key === "ArrowRight") {
         e.preventDefault();
-        dispatch(movePosition("right"));
+        dispatch(movePosition({ dir: "right", jump: e.shiftKey }));
       } else if (e.key === "ArrowUp") {
         e.preventDefault();
-        dispatch(movePosition("up"));
+        dispatch(movePosition({ dir: "up", jump: e.shiftKey }));
       } else if (e.key === "ArrowDown") {
         e.preventDefault();
-        dispatch(movePosition("down"));
+        dispatch(movePosition({ dir: "down", jump: e.shiftKey }));
       }
     }
     window.addEventListener("mousemove", trackMouse);

@@ -133,8 +133,9 @@ let gameSlice = createSlice({
      *
      * - if the game hasn't started, the first click will generate the mines for board
      */
-    click(state, action: { payload: Point }) {
-      let { x, y } = action.payload;
+    click(state) {
+      if (!state.position) return;
+      let { x, y } = state.position;
       let cell = state.board[y][x]!;
       state.position = { x, y };
       if (cell.isFlagged) return;
@@ -179,26 +180,33 @@ let gameSlice = createSlice({
       }
     },
 
-    movePosition(state, action: { payload: "left" | "right" | "up" | "down" }) {
+    movePosition(
+      state,
+      action: {
+        payload: { dir: "left" | "right" | "up" | "down"; jump: boolean };
+      }
+    ) {
       if (!state.position) return;
 
-      switch (action.payload) {
+      let dist = action.payload.jump ? 2 : 1;
+
+      switch (action.payload.dir) {
         case "left":
-          state.position.x = Math.max(state.position.x - 1, 0);
+          state.position.x = Math.max(state.position.x - dist, 0);
           break;
         case "right":
           state.position.x = Math.min(
-            state.position.x + 1,
-            state.settings.width - 1
+            state.position.x + dist,
+            state.settings.width - dist
           );
           break;
         case "up":
-          state.position.y = Math.max(state.position.y - 1, 0);
+          state.position.y = Math.max(state.position.y - dist, 0);
           break;
         case "down":
           state.position.y = Math.min(
-            state.position.y + 1,
-            state.settings.height - 1
+            state.position.y + dist,
+            state.settings.height - dist
           );
           break;
       }
@@ -247,6 +255,8 @@ let gameSlice = createSlice({
     },
 
     hover(state, { payload }: { payload: Point }) {
+      if (payload.x === state.position?.x && payload.y === state.position?.y)
+        return;
       state.position = payload;
     },
   },
