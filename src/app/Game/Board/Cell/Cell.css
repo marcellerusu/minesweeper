@@ -3,7 +3,10 @@
   height: var(--cell-size);
   background-color: grey;
   --border-size: calc(var(--cell-size) / 8);
-  border: var(--border-size) outset black;
+  border-top: var(--border-size) solid #aaa;
+  border-left: var(--border-size) solid #aaa;
+  border-bottom: var(--border-size) solid #444;
+  border-right: var(--border-size) solid #444;
 }
 
 .cell[data-is-open="true"][data-is-active="true"] {
