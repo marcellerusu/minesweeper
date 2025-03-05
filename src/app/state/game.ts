@@ -197,7 +197,7 @@ let gameSlice = createSlice({
         case "right":
           state.position.x = Math.min(
             state.position.x + dist,
-            state.settings.width - dist
+            state.settings.width - 1
           );
           break;
         case "up":
@@ -206,7 +206,7 @@ let gameSlice = createSlice({
         case "down":
           state.position.y = Math.min(
             state.position.y + dist,
-            state.settings.height - dist
+            state.settings.height - 1
           );
           break;
       }

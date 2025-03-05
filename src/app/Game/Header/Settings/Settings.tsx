@@ -53,6 +53,10 @@ function Settings() {
             </option>
             <option value="expert">Expert (16 x 30 with 99 mines)</option>
           </select>
+
+          <a href="https://github.com/marcellerusu/minesweeper" target="_blank">
+            view source
+          </a>
         </form>
       </dialog>
     </>

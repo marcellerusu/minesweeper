@@ -60,4 +60,11 @@ dialog {
       font-weight: bold;
     }
   }
+  a {
+    display: flex;
+    justify-content: end;
+    margin-top: 1em;
+    width: 100%;
+    color: white;
+  }
 }
