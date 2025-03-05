@@ -48,8 +48,6 @@ function Game() {
       if (e.key === " ") {
         e.preventDefault();
         dispatch(space());
-      } else if (e.metaKey) {
-        dispatch(click());
       } else if (e.key === "ArrowLeft") {
         e.preventDefault();
         dispatch(movePosition({ dir: "left", jump: e.shiftKey }));
