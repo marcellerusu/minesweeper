@@ -19,27 +19,11 @@
   filter: saturate(0) contrast(0.5);
 }
 
-.game-won-msg {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translateX(-50%) translateY(-50%);
-  font-family: monospace;
-  font-weight: bold;
-  color: black;
-  background-color: white;
-  width: 200px;
-  display: flex;
-  font-size: 20px;
-  justify-content: center;
-  align-items: center;
-  height: 100px;
-}
-
-.game:has(.game-won-msg) .board {
-  filter: contrast(0.5);
-}
-
 .game:has(.game-over-msg, .game-won-msg) .board {
   pointer-events: none;
+}
+
+.game-over-msg {
+  display: flex;
+  flex-direction: column;
 }
