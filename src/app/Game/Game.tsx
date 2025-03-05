@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { click, hover, movePosition, reset, space } from "@/app/state/game";
+import { hover, movePosition, reset, space } from "@/app/state/game";
 import { RootState } from "@/app/store";
 import Board from "./Board/Board";
 import Header from "./Header/Header";
