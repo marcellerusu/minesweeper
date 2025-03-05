@@ -133,8 +133,8 @@ let gameSlice = createSlice({
      *
      * - if the game hasn't started, the first click will generate the mines for board
      */
-    click(state) {
-      if (!state.position) return;
+    click(state, action: { payload: Point }) {
+      if (!state.position) state.position = action.payload;
       let { x, y } = state.position;
       let cell = state.board[y][x]!;
       state.position = { x, y };
