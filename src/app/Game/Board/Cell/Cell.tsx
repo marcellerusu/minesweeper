@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import type { Cell, Point } from "@/app/types";
-import { click } from "@/app/state/game";
+import { click, space } from "@/app/state/game";
 import { mineCountFor } from "@/app/state/game";
 import { RootState } from "@/app/store";
 import ICONS, { Svg } from "./icons";
@@ -21,7 +21,17 @@ function Cell({ x, y, isGameWon }: Point & { isGameWon: boolean }) {
   let dispatch = useDispatch();
   return (
     <div
-      onMouseDown={() => dispatch(click({ x, y }))}
+      onMouseDown={(e) => {
+        if (e.button === 2) {
+          e.preventDefault();
+          dispatch(space());
+        } else {
+          dispatch(click({ x, y }));
+        }
+      }}
+      onContextMenu={(e) => {
+        e.preventDefault();
+      }}
       className="cell"
       data-is-active={position?.x === x && position?.y === y}
       data-is-open={cell.isOpen}
