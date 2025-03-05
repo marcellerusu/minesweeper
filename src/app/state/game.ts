@@ -254,8 +254,8 @@ let gameSlice = createSlice({
       state.status = "initial";
     },
 
-    hover(state, { payload }: { payload: Point }) {
-      if (payload.x === state.position?.x && payload.y === state.position?.y)
+    hover(state, { payload }: { payload: Point | null }) {
+      if (payload?.x === state.position?.x && payload?.y === state.position?.y)
         return;
       state.position = payload;
     },

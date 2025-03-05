@@ -36,7 +36,7 @@ function Game() {
           elem.matches(".cell[data-x][data-y]")
         ) as HTMLDivElement;
       // in case the mouse isn't on top of a cell
-      if (!cellHtml) return;
+      if (!cellHtml) return dispatch(hover(null));
 
       // guaranteed to exist since the .matches(".cell[data-x][data-y]")
       let x = Number(cellHtml.dataset.x),
