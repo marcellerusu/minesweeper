@@ -11,22 +11,6 @@ function Game() {
   let isEmpty = useSelector(({ game: { board } }: RootState) =>
     board.every((row) => row.every((cell) => !cell.isOpen))
   );
-  let isGameLost = useSelector(({ game: { board } }: RootState) =>
-    board.some((row) => row.some((cell) => cell.isMine && cell.isOpen))
-  );
-  let isGameWon = useSelector(({ game: { board } }: RootState) =>
-    board.every((row) =>
-      row.every((cell) => {
-        if (cell.isFlagged) {
-          return cell.isMine;
-        } else if (cell.isMine) {
-          return !cell.isOpen;
-        } else {
-          return cell.isOpen;
-        }
-      })
-    )
-  );
 
   useEffect(() => {
     let cellSize = localStorage.getItem("--cell-size") ?? "40";
@@ -73,6 +57,22 @@ function Game() {
     };
   }, []);
 
+  let isGameLost = useSelector(({ game: { board } }: RootState) =>
+    board.some((row) => row.some((cell) => cell.isMine && cell.isOpen))
+  );
+  let isGameWon = useSelector(({ game: { board } }: RootState) =>
+    board.every((row) =>
+      row.every((cell) => {
+        if (cell.isFlagged) {
+          return cell.isMine;
+        } else if (cell.isMine) {
+          return !cell.isOpen;
+        } else {
+          return cell.isOpen;
+        }
+      })
+    )
+  );
   let status: "stopped" | "playing" | "reset";
   if (isEmpty) status = "reset";
   else if (isGameLost || isGameWon) status = "stopped";
