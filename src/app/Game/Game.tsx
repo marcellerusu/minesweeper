@@ -29,7 +29,7 @@ function Game() {
   );
 
   useEffect(() => {
-    let cellSize = localStorage.getItem("--cell-size") ?? "45";
+    let cellSize = localStorage.getItem("--cell-size") ?? "40";
     document.body.style.setProperty("--cell-size", `${cellSize}px`);
 
     function trackMouse(e: MouseEvent) {
