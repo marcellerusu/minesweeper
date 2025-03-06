@@ -29,6 +29,9 @@ function Game() {
   );
 
   useEffect(() => {
+    let cellSize = localStorage.getItem("--cell-size") ?? "45";
+    document.body.style.setProperty("--cell-size", `${cellSize}px`);
+
     function trackMouse(e: MouseEvent) {
       let cellHtml = document
         .elementsFromPoint(e.clientX, e.clientY)

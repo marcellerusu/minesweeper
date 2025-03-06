@@ -54,6 +54,22 @@ function Settings() {
             <option value="expert">Expert (16 x 30 with 99 mines)</option>
           </select>
 
+          <label>
+            size
+            <input
+              type="range"
+              min="10"
+              max="60"
+              onChange={(e) => {
+                document.body.style.setProperty(
+                  "--cell-size",
+                  `${e.currentTarget.value}px`
+                );
+                localStorage.setItem("--cell-size", e.currentTarget.value);
+              }}
+            ></input>
+          </label>
+
           <a href="https://github.com/marcellerusu/minesweeper" target="_blank">
             view source
           </a>
