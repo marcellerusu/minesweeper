@@ -16,7 +16,7 @@
   align-items: center;
   height: 100%;
   width: 100%;
-  --cell-size: 45px;
+  --cell-size: 40px;
 }
 
 * {

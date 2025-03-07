@@ -32,7 +32,6 @@ dialog {
 .settings-form {
   font-family: monospace;
   font-size: 15px;
-  background-color: black;
   padding: 1rem;
   display: flex;
   flex-direction: column;
