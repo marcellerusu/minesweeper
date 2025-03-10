@@ -53,11 +53,17 @@ function useSpaceControls() {
       }
     }
 
+    function onMouseLeave(e: MouseEvent) {
+      dispatch(hover(null));
+    }
+
     window.addEventListener("mousemove", trackMouse);
     window.addEventListener("keydown", onKeydown);
+    document.documentElement.addEventListener("mouseleave", onMouseLeave);
     return () => {
       window.removeEventListener("mousemove", trackMouse);
       window.removeEventListener("keydown", onKeydown);
+      document.documentElement.removeEventListener("mouseleave", onMouseLeave);
     };
   }, []);
 }
