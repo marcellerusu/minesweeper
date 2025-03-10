@@ -1,6 +1,7 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import type { Cell, Point } from "@/app/types";
+import { cx } from "@/shared/utils";
 import { click, space } from "@/app/state/game";
 import { mineCountFor } from "@/app/state/game";
 import { RootState } from "@/app/store";
@@ -32,14 +33,13 @@ function Cell({ x, y }: Point) {
       onContextMenu={(e) => {
         e.preventDefault();
       }}
-      className="cell"
-      data-is-active={position?.x === x && position?.y === y}
-      data-is-open={cell.isOpen}
-      // the game can be over with unflagged cells
-      // these are all the mines, so we'll flag it to make it
-      // visually appealing
-      data-is-flagged={cell.isFlagged}
-      data-is-mine={cell.isMine}
+      className={`cell ${cx({
+        active: position?.x === x && position?.y === y,
+        open: cell.isOpen,
+        flagged: cell.isFlagged,
+        mine: cell.isMine,
+      })}`}
+      // for space controls
       data-x={cell.x}
       data-y={cell.y}
     >

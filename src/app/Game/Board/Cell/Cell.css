@@ -9,15 +9,15 @@
   border-right: var(--border-size) solid #444;
 }
 
-.cell[data-is-open="true"][data-is-active="true"] {
+.cell.open.active {
   border-color: white !important;
 }
 
-.cell[data-is-open="false"][data-is-active="true"] {
+.cell:not(.open).active {
   border-color: white !important;
 }
 
-.cell[data-is-open="true"] {
+.cell.open {
   animation: flash_green 300ms ease-in-out;
   svg {
     animation: pop 100ms ease-in-out;
@@ -66,7 +66,7 @@
   }
 }
 
-.cell[data-is-open="false"] {
+.cell:not(.open) {
   &:hover {
     cursor: pointer;
     filter: contrast(0.8);
@@ -83,12 +83,12 @@
   align-items: center;
 }
 
-.cell[data-is-open="true"][data-is-mine="false"] {
+.cell.open:not(.mine) {
   border: calc(var(--border-size) / 2) solid #555;
   padding: calc(var(--border-size) / 2);
 }
 
-.cell[data-is-open="true"][data-is-mine="true"] {
+.cell.open.mine {
   border: calc(var(--border-size) / 2) solid #333;
   padding: calc(var(--border-size) / 2);
   background-color: #a00;
@@ -110,18 +110,18 @@
 }
 
 /* show flag when flagged OR if the game is won */
-.cell[data-is-flagged="true"] .flag,
-.game:has(.won) .cell[data-is-open="false"] .flag {
+.cell.flagged .flag,
+.game:has(.won) .cell:not(.open) .flag {
   display: initial;
 }
 
 /* show numbers when cell is open, unless its a mine */
-.cell[data-is-open="true"]:not([data-is-mine="true"]) .number {
+.cell.open:not(.mine) .number {
   display: initial;
 }
 
 /* show mine when open, or game lost */
-.cell[data-is-open="true"][data-is-mine="true"] .mine,
-.game:has(.lost) .cell[data-is-mine="true"] .mine {
+.cell.open.mine svg.mine,
+.game:has(.lost) .cell.mine svg.mine {
   display: initial;
 }
