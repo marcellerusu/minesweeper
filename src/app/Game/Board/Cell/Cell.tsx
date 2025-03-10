@@ -4,7 +4,7 @@ import type { Cell, Point } from "@/app/types";
 import { click, space } from "@/app/state/game";
 import { mineCountFor } from "@/app/state/game";
 import { RootState } from "@/app/store";
-import ICONS, { Svg } from "./icons";
+import ICONS from "./icons";
 import "./Cell.css";
 
 function Cell({ x, y }: Point) {
@@ -43,9 +43,9 @@ function Cell({ x, y }: Point) {
       data-x={cell.x}
       data-y={cell.y}
     >
-      {mineCount > 0 && <Svg>{ICONS[mineCount]}</Svg>}
-      {cell.isMine && <Svg>{ICONS.mine}</Svg>}
-      <Svg>{ICONS.flag}</Svg>
+      {mineCount > 0 && ICONS[mineCount]}
+      {cell.isMine && ICONS.mine}
+      {ICONS.flag}
     </div>
   );
 }
