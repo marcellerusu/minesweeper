@@ -30,6 +30,7 @@ function Cell({ x, y }: Point) {
           dispatch(click({ x, y }));
         }
       }}
+      onDoubleClick={() => dispatch(space())}
       onContextMenu={(e) => {
         e.preventDefault();
       }}
