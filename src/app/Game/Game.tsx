@@ -73,13 +73,13 @@ function Game() {
       <Header status={status} />
       <Board isGameWon={isGameWon} />
       {isGameLost && (
-        <div onClick={() => dispatch(reset())} className="game-over-msg">
+        <div onClick={() => dispatch(reset())} className="game-over-msg lost">
           You lost
           <button>play again</button>
         </div>
       )}
       {isGameWon && (
-        <div onClick={() => dispatch(reset())} className="game-over-msg">
+        <div onClick={() => dispatch(reset())} className="game-over-msg won">
           You won
           <button>play again</button>
         </div>

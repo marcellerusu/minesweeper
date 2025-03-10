@@ -15,9 +15,20 @@
   height: 100px;
 }
 
+.board {
+  transition: filter 200ms linear;
+}
+
 .game:has(.game-over-msg) .board {
-  filter: saturate(0) contrast(0.5);
   pointer-events: none;
+}
+
+.game:has(.game-over-msg.won) .board {
+  filter: contrast(0.5);
+}
+
+.game:has(.game-over-msg.lost) .board {
+  filter: saturate(0) contrast(0.5);
 }
 
 .game-over-msg {
