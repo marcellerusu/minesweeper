@@ -10,9 +10,6 @@ import Dialog from "@/shared/Dialog/Dialog";
 
 function Header() {
   let dispatch = useDispatch();
-  let isEmpty = useSelector(({ game: { board } }: RootState) =>
-    board.every((row) => row.every((cell) => !cell.isOpen))
-  );
   let isGameLost = useSelector(({ game: { board } }: RootState) =>
     board.some((row) => row.some((cell) => cell.isMine && cell.isOpen))
   );
@@ -29,18 +26,13 @@ function Header() {
       })
     )
   );
-  let status: "stopped" | "playing" | "reset";
-  if (isEmpty) status = "reset";
-  else if (isGameLost || isGameWon) status = "stopped";
-  else status = "playing";
-
   return (
     <header>
       <MineCounter />
       <Settings />
-      <Timer status={status} />
+      <Timer isGameOver={isGameLost || isGameWon} />
       <Dialog
-        open={status === "stopped"}
+        open={isGameLost || isGameWon}
         onClose={() => dispatch(reset())}
         className="game-over"
       >

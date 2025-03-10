@@ -1,7 +1,17 @@
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import SevenSegmentDisplay from "@/shared/SevenSegmentDisplay/SevenSegmentDisplay";
+import { RootState } from "@/app/store";
 
-function Timer({ status }: { status: "playing" | "stopped" | "reset" }) {
+function Timer({ isGameOver }: { isGameOver: boolean }) {
+  let isEmpty = useSelector(({ game: { board } }: RootState) =>
+    board.every((row) => row.every((cell) => !cell.isOpen))
+  );
+  let status: "stopped" | "playing" | "reset";
+  if (isEmpty) status = "reset";
+  else if (isGameOver) status = "stopped";
+  else status = "playing";
+
   let [time, setTimer] = useState(0);
 
   // this code is kind of nasty to handle game status changes
