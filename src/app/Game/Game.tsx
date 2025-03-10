@@ -53,7 +53,7 @@ function useSpaceControls() {
       }
     }
 
-    function onMouseLeave(e: MouseEvent) {
+    function onMouseLeave() {
       dispatch(hover(null));
     }
 
