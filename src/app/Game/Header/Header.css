@@ -20,6 +20,11 @@ header dialog.game-over[open] {
   p {
     margin: 0;
   }
+  button {
+    font-family: inherit;
+    background-color: black;
+    color: white;
+  }
 }
 
 .board {
@@ -36,15 +41,4 @@ header dialog.game-over[open] {
 
 .game:has(.game-over .lost) .board {
   filter: saturate(0) contrast(0.5);
-}
-
-.game-over-msg {
-  display: flex;
-  flex-direction: column;
-  color: black;
-  button {
-    font-family: inherit;
-    background-color: black;
-    color: white;
-  }
 }

@@ -41,7 +41,7 @@ function Header() {
       <Timer status={status} />
       <Dialog
         open={status === "stopped"}
-        onChange={() => dispatch(reset())}
+        onClose={() => dispatch(reset())}
         className="game-over"
       >
         {isGameLost && <p className="lost">You Lost</p>}

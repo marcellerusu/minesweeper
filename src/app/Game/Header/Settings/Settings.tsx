@@ -23,7 +23,7 @@ function Settings() {
   return (
     <>
       <Gear onClick={() => setIsOpen(true)} />
-      <Dialog open={isOpen} onChange={setIsOpen}>
+      <Dialog open={isOpen} onClose={() => setIsOpen(false)}>
         <form className="settings-form" method="dialog">
           <button className="close">x</button>
           <h1>Settings</h1>

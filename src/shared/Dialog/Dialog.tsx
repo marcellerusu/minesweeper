@@ -8,9 +8,8 @@ import React, {
 function Dialog({
   children,
   open,
-  onChange,
   ...props
-}: PropsWithChildren<{ open: boolean; onChange: (isOpen: boolean) => void }> &
+}: PropsWithChildren<{ open: boolean }> &
   DialogHTMLAttributes<HTMLDialogElement>) {
   let ref = useRef<HTMLDialogElement | null>(null);
   useEffect(() => {
@@ -31,13 +30,7 @@ function Dialog({
         // like the form then it must be clicking on the backdrop
         // and so we can close the dialog
         let clickedOn = e.target as HTMLElement;
-        if (clickedOn.matches("dialog")) {
-          ref.current!.close();
-          onChange(false);
-        }
-      }}
-      onClose={(_) => {
-        onChange(false);
+        if (clickedOn.matches("dialog")) ref.current!.close();
       }}
       {...props}
     >
