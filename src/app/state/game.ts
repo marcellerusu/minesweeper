@@ -180,38 +180,6 @@ let gameSlice = createSlice({
       }
     },
 
-    movePosition(
-      state,
-      action: {
-        payload: { dir: "left" | "right" | "up" | "down"; jump: boolean };
-      }
-    ) {
-      if (!state.position) return;
-
-      let dist = action.payload.jump ? 2 : 1;
-
-      switch (action.payload.dir) {
-        case "left":
-          state.position.x = Math.max(state.position.x - dist, 0);
-          break;
-        case "right":
-          state.position.x = Math.min(
-            state.position.x + dist,
-            state.settings.width - 1
-          );
-          break;
-        case "up":
-          state.position.y = Math.max(state.position.y - dist, 0);
-          break;
-        case "down":
-          state.position.y = Math.min(
-            state.position.y + dist,
-            state.settings.height - 1
-          );
-          break;
-      }
-    },
-
     reset(state) {
       for (let cell of state.board.flat()) {
         cell.isOpen = false;
@@ -263,7 +231,7 @@ let gameSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { click, space, reset, changeDifficulty, movePosition, hover } =
+export const { click, space, reset, changeDifficulty, hover } =
   gameSlice.actions;
 
 export default gameSlice.reducer;

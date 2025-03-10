@@ -17,13 +17,16 @@
 
 .game:has(.game-over-msg) .board {
   filter: saturate(0) contrast(0.5);
-}
-
-.game:has(.game-over-msg, .game-won-msg) .board {
   pointer-events: none;
 }
 
 .game-over-msg {
   display: flex;
   flex-direction: column;
+  color: black;
+  button {
+    font-family: inherit;
+    background-color: black;
+    color: white;
+  }
 }
