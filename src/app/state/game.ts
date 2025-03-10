@@ -21,7 +21,7 @@ function emptyCell(x: number, y: number): Cell {
   return { isMine: false, isOpen: false, isFlagged: false, x, y };
 }
 
-export function emptyGame({
+function emptyGame({
   width,
   height,
   numberOfMines,
@@ -166,16 +166,14 @@ let gameSlice = createSlice({
       if (!state.position) return;
 
       let { x, y } = state.position;
-      let cell = state.board.flat().find((c) => c.x === x && c.y === y)!;
+      let cell = state.board[y][x];
 
-      if (cell.isOpen) {
-        if (
-          mineCountFor(state.board, cell) === flagCountFor(state.board, cell)
-        ) {
-          expand(state.board, cell);
-        } else {
-        }
-      } else {
+      if (
+        cell.isOpen &&
+        mineCountFor(state.board, cell) === flagCountFor(state.board, cell)
+      ) {
+        expand(state.board, cell);
+      } else if (!cell.isOpen) {
         cell.isFlagged = !cell.isFlagged;
       }
     },
@@ -222,6 +220,16 @@ let gameSlice = createSlice({
       state.status = "initial";
     },
 
+    tryExpand(state) {
+      if (!state.position) return;
+
+      let { x, y } = state.position;
+      let cell = state.board[y][x];
+
+      if (flagCountFor(state.board, cell) === mineCountFor(state.board, cell))
+        expand(state.board, cell);
+    },
+
     hover(state, { payload }: { payload: Point | null }) {
       if (payload?.x === state.position?.x && payload?.y === state.position?.y)
         return;
@@ -231,7 +239,7 @@ let gameSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { click, space, reset, changeDifficulty, hover } =
+export const { click, tryExpand, space, reset, changeDifficulty, hover } =
   gameSlice.actions;
 
 export default gameSlice.reducer;

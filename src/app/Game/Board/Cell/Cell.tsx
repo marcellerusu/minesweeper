@@ -2,7 +2,7 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import type { Cell, Point } from "@/app/types";
 import { cx } from "@/shared/utils";
-import { click, space } from "@/app/state/game";
+import { click, tryExpand, space } from "@/app/state/game";
 import { mineCountFor } from "@/app/state/game";
 import { RootState } from "@/app/store";
 import ICONS from "./icons";
@@ -30,10 +30,8 @@ function Cell({ x, y }: Point) {
           dispatch(click({ x, y }));
         }
       }}
-      onDoubleClick={() => dispatch(space())}
-      onContextMenu={(e) => {
-        e.preventDefault();
-      }}
+      onDoubleClick={() => dispatch(tryExpand())}
+      onContextMenu={(e) => e.preventDefault()}
       className={`cell ${cx({
         active: position?.x === x && position?.y === y,
         open: cell.isOpen,
