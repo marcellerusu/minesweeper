@@ -108,8 +108,8 @@
 .cell[data-is-flagged="true"] svg {
   animation: pop_big 100ms ease-in-out;
 }
-
-.cell[data-is-flagged="true"] svg:has(.flag) {
+:is(.game:has(.won) .cell[data-is-open="false"], .cell[data-is-flagged="true"])
+  svg:has(.flag) {
   display: flex;
 }
 

@@ -7,7 +7,7 @@ import { RootState } from "@/app/store";
 import ICONS, { Svg } from "./icons";
 import "./Cell.css";
 
-function Cell({ x, y, isGameWon }: Point & { isGameWon: boolean }) {
+function Cell({ x, y }: Point) {
   let cell = useSelector(
     ({ game: { board } }: RootState) =>
       board.flat().find((cell) => cell.x === x && cell.y === y)!
@@ -38,7 +38,7 @@ function Cell({ x, y, isGameWon }: Point & { isGameWon: boolean }) {
       // the game can be over with unflagged cells
       // these are all the mines, so we'll flag it to make it
       // visually appealing
-      data-is-flagged={cell.isFlagged || (isGameWon && !cell.isOpen)}
+      data-is-flagged={cell.isFlagged}
       data-is-mine={cell.isMine}
       data-x={cell.x}
       data-y={cell.y}
