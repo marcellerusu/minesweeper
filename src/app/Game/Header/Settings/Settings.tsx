@@ -1,8 +1,9 @@
-import React, { useRef } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { changeDifficulty } from "@/app/state/game";
 import "./Settings.css";
 import { RootState } from "@/app/store";
+import Dialog from "@/shared/Dialog/Dialog";
 
 function Gear({ onClick }: { onClick: () => void }) {
   return (
@@ -15,25 +16,14 @@ function Gear({ onClick }: { onClick: () => void }) {
 }
 
 function Settings() {
-  let dialog = useRef<HTMLDialogElement>(null);
+  let [isOpen, setIsOpen] = useState(false);
   let dispatch = useDispatch();
   let { difficulty } = useSelector((state: RootState) => state.game.settings);
 
   return (
     <>
-      <Gear onClick={() => dialog.current!.showModal()} />
-      <dialog
-        ref={dialog}
-        onMouseDown={(e) => {
-          // it appears that when the dialog is open
-          // it takes up the size of the entire screen
-          // and if you click, and it's not matching something directly inside the dialog
-          // like the form then it must be clicking on the backdrop
-          // and so we can close the dialog
-          let clickedOn = e.target as HTMLElement;
-          if (clickedOn.matches("dialog")) dialog.current!.close();
-        }}
-      >
+      <Gear onClick={() => setIsOpen(true)} />
+      <Dialog open={isOpen} onChange={setIsOpen}>
         <form className="settings-form" method="dialog">
           <button className="close">x</button>
           <h1>Settings</h1>
@@ -44,7 +34,7 @@ function Settings() {
               let { difficulty } = e.currentTarget.closest("form")!
                 .elements as any;
               dispatch(changeDifficulty(difficulty.value));
-              dialog.current!.close();
+              setIsOpen(false);
             }}
           >
             <option value="beginner">Beginner (9 x 9 with 10 mines)</option>
@@ -74,7 +64,7 @@ function Settings() {
             view source
           </a>
         </form>
-      </dialog>
+      </Dialog>
     </>
   );
 }

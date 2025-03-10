@@ -5,37 +5,36 @@ header {
   padding: 5px;
 }
 
-.game-over-msg {
-  z-index: 1;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translateX(-50%) translateY(-50%);
+header dialog.game-over[open] {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   font-family: monospace;
   font-weight: bold;
   color: black;
   background-color: white;
+  padding: 1rem;
   width: 200px;
-  display: flex;
   font-size: 20px;
-  justify-content: center;
-  align-items: center;
-  height: 100px;
+  p {
+    margin: 0;
+  }
 }
 
 .board {
   transition: filter 200ms ease-in-out;
 }
 
-.game:has(.game-over-msg) .board {
+.game:has(.game-over[open]) .board {
   pointer-events: none;
 }
 
-.game:has(.game-over-msg.won) .board {
+.game:has(.game-over .won) .board {
   filter: contrast(0.5);
 }
 
-.game:has(.game-over-msg.lost) .board {
+.game:has(.game-over .lost) .board {
   filter: saturate(0) contrast(0.5);
 }
 

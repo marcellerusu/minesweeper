@@ -6,6 +6,7 @@ import MineCounter from "./MineCounter";
 import Timer from "./Timer";
 import Settings from "./Settings/Settings";
 import "./Header.css";
+import Dialog from "@/shared/Dialog/Dialog";
 
 function Header() {
   let dispatch = useDispatch();
@@ -38,18 +39,17 @@ function Header() {
       <MineCounter />
       <Settings />
       <Timer status={status} />
-      {isGameLost && (
-        <div onClick={() => dispatch(reset())} className="game-over-msg lost">
-          You lost
-          <button>play again</button>
-        </div>
-      )}
-      {isGameWon && (
-        <div onClick={() => dispatch(reset())} className="game-over-msg won">
-          You won
-          <button>play again</button>
-        </div>
-      )}
+      <Dialog
+        open={status === "stopped"}
+        onChange={() => dispatch(reset())}
+        className="game-over"
+      >
+        {isGameLost && <p className="lost">You Lost</p>}
+        {isGameWon && <p className="won">You Won</p>}
+        <button type="submit" onClick={(_) => dispatch(reset())}>
+          play again
+        </button>
+      </Dialog>
     </header>
   );
 }
