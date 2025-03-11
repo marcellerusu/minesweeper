@@ -122,14 +122,6 @@
 
 /* show mine when open, or game lost */
 .cell.open.mine svg.mine,
-.game:has(.lost) .cell.mine svg.mine {
+.game:has(.lost) .cell.mine:not(.flagged) svg.mine {
   display: initial;
-}
-
-/** if the game is lost, let's hide the flags where there are mines
-  * however if there is a flag not on a mine, let's show it so the user
-  * can find out where they went wrong
-  */
-.game:has(.lost) .cell.mine svg.flag {
-  display: none;
 }
