@@ -121,7 +121,6 @@
 }
 
 /* show mine when open, or game lost */
-.cell.open.mine svg.mine,
-.game:has(.lost) .cell.mine:not(.flagged) svg.mine {
+:is(.cell.open.mine, .game:has(.lost) .cell.mine:not(.flagged)) svg.mine {
   display: initial;
 }
