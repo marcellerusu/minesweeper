@@ -13,7 +13,7 @@ type GameState = {
     numberOfMines: number;
     difficulty: "beginner" | "intermediate" | "expert";
   };
-  position: Point | null;
+
   status: "initial" | "active";
 };
 
@@ -33,7 +33,6 @@ function emptyGame({
     ),
     status: "initial",
     settings: { width, height, numberOfMines, difficulty },
-    position: null,
   };
 }
 
@@ -133,11 +132,8 @@ let gameSlice = createSlice({
      *
      * - if the game hasn't started, the first click will generate the mines for board
      */
-    click(state, action: { payload: Point }) {
-      if (!state.position) state.position = action.payload;
-      let { x, y } = state.position;
+    click(state, { payload: { x, y } }: { payload: Point }) {
       let cell = state.board[y][x]!;
-      state.position = { x, y };
       if (cell.isFlagged) return;
       switch (state.status) {
         case "initial":
@@ -162,10 +158,7 @@ let gameSlice = createSlice({
      * - open the neighboring mines (if the cell is open, and # flag == mine count for cell)
      * - flag/unflag the cell (if the cell is unopened)
      */
-    space(state) {
-      if (!state.position) return;
-
-      let { x, y } = state.position;
+    space(state, { payload: { x, y } }: { payload: Point }) {
       let cell = state.board[y][x];
 
       if (
@@ -220,26 +213,17 @@ let gameSlice = createSlice({
       state.status = "initial";
     },
 
-    tryExpand(state) {
-      if (!state.position) return;
-
-      let { x, y } = state.position;
+    tryExpand(state, { payload: { x, y } }: { payload: Point }) {
       let cell = state.board[y][x];
 
       if (flagCountFor(state.board, cell) === mineCountFor(state.board, cell))
         expand(state.board, cell);
     },
-
-    hover(state, { payload }: { payload: Point | null }) {
-      if (payload?.x === state.position?.x && payload?.y === state.position?.y)
-        return;
-      state.position = payload;
-    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { click, tryExpand, space, reset, changeDifficulty, hover } =
+export const { click, tryExpand, space, reset, changeDifficulty } =
   gameSlice.actions;
 
 export default gameSlice.reducer;

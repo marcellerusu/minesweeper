@@ -9,11 +9,11 @@
   border-right: var(--border-size) solid #444;
 }
 
-.cell.open.active {
+.cell.open:hover {
   border-color: white !important;
 }
 
-.cell:not(.open).active {
+.cell:not(.open):hover {
   border-color: white !important;
 }
 

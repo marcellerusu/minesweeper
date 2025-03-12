@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { hover, space } from "@/app/state/game";
+import type { Point } from "@/app/types";
+import { space } from "@/app/state/game";
 import Board from "./Board/Board";
 import Header from "./Header/Header";
 
@@ -18,10 +19,6 @@ import Header from "./Header/Header";
  * via react state.
  *
  * once a space is pressed, we flag / expand the currently hovered cell
- *
- * an optimization we could do is to not `hover` the cell on each mouse move
- * but i like seeing the white border around the cell the mouse is under
- * and as far as i can tell it has negligible performance cost
  */
 function useSpaceControls() {
   let dispatch = useDispatch();
@@ -29,6 +26,7 @@ function useSpaceControls() {
   useEffect(() => {
     let cellSize = localStorage.getItem("--cell-size") ?? "40";
     document.body.style.setProperty("--cell-size", `${cellSize}px`);
+    let mouse: Point;
 
     function trackMouse(e: MouseEvent) {
       let cellHtml = document
@@ -37,33 +35,24 @@ function useSpaceControls() {
           elem.matches(".cell[data-x][data-y]")
         ) as HTMLDivElement;
       // in case the mouse isn't on top of a cell
-      if (!cellHtml) return dispatch(hover(null));
+      if (!cellHtml) return;
 
       // guaranteed to exist since the .matches(".cell[data-x][data-y]")
-      let x = Number(cellHtml.dataset.x),
-        y = Number(cellHtml.dataset.y);
-
-      dispatch(hover({ x, y }));
+      mouse = { x: Number(cellHtml.dataset.x), y: Number(cellHtml.dataset.y) };
     }
 
     function onKeydown(e: KeyboardEvent) {
       if (e.key === " ") {
         e.preventDefault();
-        dispatch(space());
+        dispatch(space(mouse));
       }
-    }
-
-    function onMouseLeave() {
-      dispatch(hover(null));
     }
 
     window.addEventListener("mousemove", trackMouse);
     window.addEventListener("keydown", onKeydown);
-    document.documentElement.addEventListener("mouseleave", onMouseLeave);
     return () => {
       window.removeEventListener("mousemove", trackMouse);
       window.removeEventListener("keydown", onKeydown);
-      document.documentElement.removeEventListener("mouseleave", onMouseLeave);
     };
   }, []);
 }

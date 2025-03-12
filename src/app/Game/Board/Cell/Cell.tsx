@@ -14,23 +14,20 @@ function Cell({ x, y }: Point) {
   let mineCount = useSelector(({ game: { board } }: RootState) =>
     mineCountFor(board, cell)
   );
-  let position = useSelector(({ game: { position } }: RootState) => {
-    if (position?.x === x && position?.y === y) return position;
-  });
+
   return (
     <div
       onMouseDown={(e) => {
         if (e.button === 2) {
           e.preventDefault();
-          dispatch(space());
+          dispatch(space({ x, y }));
         } else {
           dispatch(click({ x, y }));
         }
       }}
-      onDoubleClick={() => dispatch(tryExpand())}
+      onDoubleClick={() => dispatch(tryExpand({ x, y }))}
       onContextMenu={(e) => e.preventDefault()}
       className={`cell ${cx({
-        active: position?.x === x && position?.y === y,
         open: cell.isOpen,
         flagged: cell.isFlagged,
         mine: cell.isMine,
