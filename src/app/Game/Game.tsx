@@ -31,9 +31,9 @@ function useSpaceControls() {
     function trackMouse(e: MouseEvent) {
       let cellHtml = document
         .elementsFromPoint(e.clientX, e.clientY)
-        .find((elem) =>
-          elem.matches(".cell[data-x][data-y]")
-        ) as HTMLDivElement;
+        .find((elem) => elem.matches(".cell[data-x][data-y]")) as
+        | HTMLDivElement
+        | undefined;
       // in case the mouse isn't on top of a cell
       if (!cellHtml) return;
 

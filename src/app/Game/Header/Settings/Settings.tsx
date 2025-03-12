@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { changeDifficulty } from "@/app/state/game";
-import "./Settings.css";
-import { RootState } from "@/app/store";
 import Dialog from "@/shared/Dialog/Dialog";
+import { changeDifficulty } from "@/app/state/game";
+import { RootState } from "@/app/store";
+import "./Settings.css";
 
-function Gear({ onClick }: { onClick: () => void }) {
+function Hamburger({ onClick }: { onClick: () => void }) {
   return (
     <svg viewBox="0 0 10 10" className="settings-icon" onClick={onClick}>
       <line x1={0} y1={2} x2={10} y2={2} stroke="lightgrey" strokeWidth={1} />
@@ -22,7 +22,7 @@ function Settings() {
 
   return (
     <>
-      <Gear onClick={() => setIsOpen(true)} />
+      <Hamburger onClick={() => setIsOpen(true)} />
       <Dialog open={isOpen} onClose={() => setIsOpen(false)}>
         <form className="settings-form" method="dialog">
           <button className="close">x</button>
@@ -31,9 +31,7 @@ function Settings() {
             name="difficulty"
             defaultValue={difficulty}
             onChange={(e) => {
-              let { difficulty } = e.currentTarget.closest("form")!
-                .elements as any;
-              dispatch(changeDifficulty(difficulty.value));
+              dispatch(changeDifficulty(e.currentTarget.value as any));
               setIsOpen(false);
             }}
           >
