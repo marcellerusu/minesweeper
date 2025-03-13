@@ -1,13 +1,13 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Dialog from "@/shared/Dialog/Dialog";
+import { useIsGameWon } from "@/app/state/hooks";
 import { RootState } from "@/app/store";
 import { reset } from "@/app/state/game";
 import MineCounter from "./MineCounter";
-import Timer from "./Timer";
 import Settings from "./Settings/Settings";
+import Timer from "./Timer";
 import "./Header.css";
-import { useIsGameWon } from "@/app/state/hooks";
 
 function Header() {
   let dispatch = useDispatch();

@@ -14,10 +14,18 @@ function MineCounter() {
     ({ game: { board } }: RootState) =>
       board.flat().filter((cell) => cell.isMine).length
   );
+  let isEmpty = useSelector(({ game: { board } }: RootState) =>
+    board.every((row) => row.every((cell) => !cell.isOpen))
+  );
+  let { numberOfMines: totalMines } = useSelector(
+    ({ game: { settings } }: RootState) => settings
+  );
+
+  if (isGameWon) return <SevenSegmentDisplay number={0} />;
+  if (isEmpty) return <SevenSegmentDisplay number={totalMines} />;
 
   let numberOfMinesLeft = numberOfMines - numberOfFlags;
 
-  if (isGameWon) return <SevenSegmentDisplay number={0} />;
   return <SevenSegmentDisplay number={numberOfMinesLeft} />;
 }
 

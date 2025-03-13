@@ -13,7 +13,6 @@ type GameState = {
     numberOfMines: number;
     difficulty: "beginner" | "intermediate" | "expert";
   };
-
   status: "initial" | "active";
 };
 
@@ -102,7 +101,7 @@ function flagCountFor(board: Board, cell: Point): number {
 function expand(board: Board, cell: Point, ignore: Point[] = []) {
   let neighbors = neighborsOf(board, cell)
     .filter((a) => !ignore.some((b) => b.x === a.x && b.y === a.y))
-    .filter(({ isFlagged, isOpen }) => !isFlagged && !isOpen);
+    .filter(({ isFlagged, isOpen }) => !(isFlagged || isOpen));
 
   ignore = [...ignore, cell, ...neighbors];
 
