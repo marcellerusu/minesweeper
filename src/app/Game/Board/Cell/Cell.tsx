@@ -17,7 +17,7 @@ function Cell({ x, y }: Point) {
 
   return (
     <div
-      onMouseDown={(e) => {
+      onClick={(e) => {
         if (e.button === 2) {
           e.preventDefault();
           dispatch(space({ x, y }));
