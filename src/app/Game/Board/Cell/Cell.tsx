@@ -17,16 +17,12 @@ function Cell({ x, y }: Point) {
 
   return (
     <div
-      onClick={(e) => {
-        if (e.button === 2) {
-          e.preventDefault();
-          dispatch(space({ x, y }));
-        } else {
-          dispatch(click({ x, y }));
-        }
+      onClick={(_) => dispatch(click({ x, y }))}
+      onDoubleClick={(_) => dispatch(tryExpand({ x, y }))}
+      onContextMenu={(e) => {
+        e.preventDefault();
+        dispatch(space({ x, y }));
       }}
-      onDoubleClick={() => dispatch(tryExpand({ x, y }))}
-      onContextMenu={(e) => e.preventDefault()}
       className={`cell ${cx({
         open: cell.isOpen,
         flagged: cell.isFlagged,
