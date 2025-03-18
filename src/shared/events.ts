@@ -1,11 +1,11 @@
 import { useEffect } from "react";
 
-export function useWindowEvent<E extends Event>(
-  kind: string,
-  cb: (e: E) => void
+export function useWindowEvent<K extends keyof WindowEventMap>(
+  kind: K,
+  cb: (e: WindowEventMap[K]) => void
 ) {
   useEffect(() => {
-    window.addEventListener(kind as any, cb);
-    return () => window.removeEventListener(kind as any, cb);
+    window.addEventListener(kind, cb);
+    return () => window.removeEventListener(kind, cb);
   }, []);
 }

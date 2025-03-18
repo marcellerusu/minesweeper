@@ -1,10 +1,10 @@
 import React from "react";
 import type { Point } from "@/app/types";
+import { useWindowEvent } from "@/shared/events";
 import { reset, space } from "@/app/state/game";
 import { useDispatch } from "@/app/store";
 import Board from "./Board/Board";
 import Header from "./Header/Header";
-import { useWindowEvent } from "@/shared/events";
 
 // we don't want to track this stuff in react state
 let cellSize = localStorage.getItem("--cell-size") ?? "40";
@@ -13,7 +13,7 @@ let mouse: Point;
 
 function Game() {
   let dispatch = useDispatch();
-  useWindowEvent<KeyboardEvent>("keydown", (e) => {
+  useWindowEvent("keydown", (e) => {
     if (e.key === " ") {
       e.preventDefault();
       dispatch(space(mouse));
@@ -21,7 +21,7 @@ function Game() {
       dispatch(reset());
     }
   });
-  useWindowEvent<MouseEvent>("mousemove", (e) => {
+  useWindowEvent("mousemove", (e) => {
     let cellHtml = document
       .elementsFromPoint(e.clientX, e.clientY)
       .find((elem): elem is HTMLDivElement =>
