@@ -1,11 +1,10 @@
 import "./Board.css";
 import React from "react";
-import { useSelector } from "react-redux";
-import { RootState } from "@/app/store";
+import { useSelector } from "@/app/store";
 import Cell from "./Cell/Cell";
 
 function Board() {
-  let { width, height } = useSelector(({ game }: RootState) => game.settings);
+  let { width, height } = useSelector(({ game }) => game.settings);
   return (
     <div className="board">
       {Array.from({ length: height }).map((_, y) => (

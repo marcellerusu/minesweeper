@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
 import type { Point } from "@/app/types";
 import { space } from "@/app/state/game";
+import { useDispatch } from "@/app/store";
 import Board from "./Board/Board";
 import Header from "./Header/Header";
 

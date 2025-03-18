@@ -1,8 +1,7 @@
-import { useSelector } from "react-redux";
-import { RootState } from "@/app/store";
+import { useSelector } from "@/app/store";
 
 export function useIsGameWon() {
-  return useSelector(({ game: { board } }: RootState) =>
+  return useSelector(({ game: { board } }) =>
     board.every((row) =>
       row.every((cell) => {
         if (cell.isFlagged) {

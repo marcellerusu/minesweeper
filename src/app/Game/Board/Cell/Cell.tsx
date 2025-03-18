@@ -1,19 +1,16 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
 import type { Cell, Point } from "@/app/types";
 import { cx } from "@/shared/utils";
 import { click, tryExpand, space } from "@/app/state/game";
 import { mineCountFor } from "@/app/state/game";
-import { RootState } from "@/app/store";
+import { useDispatch, useSelector } from "@/app/store";
 import ICONS from "./icons";
 import "./Cell.css";
 
 function Cell({ x, y }: Point) {
   let dispatch = useDispatch();
-  let cell = useSelector(({ game: { board } }: RootState) => board[y][x]!);
-  let mineCount = useSelector(({ game: { board } }: RootState) =>
-    mineCountFor(board, cell)
-  );
+  let cell = useSelector(({ game: { board } }) => board[y][x]!);
+  let mineCount = useSelector(({ game }) => mineCountFor(game.board, cell));
 
   return (
     <div

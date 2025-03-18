@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import Dialog from "@/shared/Dialog/Dialog";
 import { changeDifficulty } from "@/app/state/game";
-import { RootState } from "@/app/store";
+import { useDispatch, useSelector } from "@/app/store";
 import "./Settings.css";
 
 function Hamburger({ onClick }: { onClick: () => void }) {
@@ -18,7 +17,7 @@ function Hamburger({ onClick }: { onClick: () => void }) {
 function Settings() {
   let [isOpen, setIsOpen] = useState(false);
   let dispatch = useDispatch();
-  let { difficulty } = useSelector((state: RootState) => state.game.settings);
+  let { difficulty } = useSelector((state) => state.game.settings);
 
   return (
     <>

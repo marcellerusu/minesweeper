@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import SevenSegmentDisplay from "@/shared/SevenSegmentDisplay/SevenSegmentDisplay";
-import { RootState } from "@/app/store";
+import { useSelector } from "@/app/store";
 
 function Timer({ isGameOver }: { isGameOver: boolean }) {
   let [time, setTimer] = useState(0);
-  let isEmpty = useSelector(({ game: { board } }: RootState) =>
+  let isEmpty = useSelector(({ game: { board } }) =>
     board.every((row) => row.every((cell) => !cell.isOpen))
   );
   let isPlaying = !isEmpty && !isGameOver;

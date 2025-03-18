@@ -1,8 +1,7 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
 import Dialog from "@/shared/Dialog/Dialog";
 import { useIsGameWon } from "@/app/state/hooks";
-import { RootState } from "@/app/store";
+import { useDispatch, useSelector } from "@/app/store";
 import { reset } from "@/app/state/game";
 import MineCounter from "./MineCounter";
 import Settings from "./Settings/Settings";
@@ -11,7 +10,7 @@ import "./Header.css";
 
 function Header() {
   let dispatch = useDispatch();
-  let isGameLost = useSelector(({ game: { board } }: RootState) =>
+  let isGameLost = useSelector(({ game: { board } }) =>
     board.some((row) => row.some((cell) => cell.isMine && cell.isOpen))
   );
   let isGameWon = useIsGameWon();
