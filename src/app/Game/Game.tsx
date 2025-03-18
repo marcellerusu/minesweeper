@@ -1,9 +1,10 @@
 import React, { useEffect } from "react";
 import type { Point } from "@/app/types";
-import { space } from "@/app/state/game";
+import { reset, space } from "@/app/state/game";
 import { useDispatch } from "@/app/store";
 import Board from "./Board/Board";
 import Header from "./Header/Header";
+import { useKeyPressed } from "@/shared/events";
 
 /**
  * This is to be able to flag / expand a cell by pressing space while
@@ -31,9 +32,10 @@ function useSpaceControls() {
     function trackMouse(e: MouseEvent) {
       let cellHtml = document
         .elementsFromPoint(e.clientX, e.clientY)
-        .find((elem) => elem.matches(".cell[data-x][data-y]")) as
-        | HTMLDivElement
-        | undefined;
+        .find((elem): elem is HTMLDivElement =>
+          elem.matches(".cell[data-x][data-y]")
+        );
+
       // in case the mouse isn't on top of a cell
       if (!cellHtml) return;
 
@@ -59,6 +61,8 @@ function useSpaceControls() {
 
 function Game() {
   useSpaceControls();
+  let dispatch = useDispatch();
+  useKeyPressed("r", () => dispatch(reset()));
   return (
     <div className="game">
       <Header />
