@@ -9,8 +9,8 @@ export type RootState = ReturnType<typeof store.getState>;
 // Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
 export type AppDispatch = typeof store.dispatch;
 
-export function useSelector<T>(selector: (state: RootState) => T) {
-  return reactRedux.useSelector(selector);
+export function useSelector<T>(selector: (state: RootState["game"]) => T) {
+  return reactRedux.useSelector<RootState, T>((state) => selector(state.game));
 }
 
 export function useDispatch() {

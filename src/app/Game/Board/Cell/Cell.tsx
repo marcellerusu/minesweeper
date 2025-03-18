@@ -9,8 +9,8 @@ import "./Cell.css";
 
 function Cell({ x, y }: Point) {
   let dispatch = useDispatch();
-  let cell = useSelector(({ game: { board } }) => board[y][x]!);
-  let mineCount = useSelector(({ game }) => mineCountFor(game.board, cell));
+  let cell = useSelector(({ board }) => board[y][x]!);
+  let mineCount = useSelector(({ board }) => mineCountFor(board, cell));
 
   return (
     <div

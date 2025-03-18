@@ -4,7 +4,7 @@ import { useSelector } from "@/app/store";
 
 function Timer({ isGameOver }: { isGameOver: boolean }) {
   let [time, setTimer] = useState(0);
-  let isEmpty = useSelector(({ game: { board } }) =>
+  let isEmpty = useSelector(({ board }) =>
     board.every((row) => row.every((cell) => !cell.isOpen))
   );
   let isPlaying = !isEmpty && !isGameOver;

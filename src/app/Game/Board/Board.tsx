@@ -4,7 +4,7 @@ import { useSelector } from "@/app/store";
 import Cell from "./Cell/Cell";
 
 function Board() {
-  let { width, height } = useSelector(({ game }) => game.settings);
+  let { width, height } = useSelector(({ settings }) => settings);
   return (
     <div className="board">
       {Array.from({ length: height }).map((_, y) => (

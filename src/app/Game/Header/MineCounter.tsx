@@ -6,16 +6,15 @@ import SevenSegmentDisplay from "@/shared/SevenSegmentDisplay/SevenSegmentDispla
 function MineCounter() {
   let isGameWon = useIsGameWon();
   let numberOfFlags = useSelector(
-    ({ game: { board } }) =>
-      board.flat().filter((cell) => cell.isFlagged).length
+    ({ board }) => board.flat().filter((cell) => cell.isFlagged).length
   );
   let numberOfMines = useSelector(
-    ({ game: { board } }) => board.flat().filter((cell) => cell.isMine).length
+    ({ board }) => board.flat().filter((cell) => cell.isMine).length
   );
-  let isEmpty = useSelector(({ game: { board } }) =>
+  let isEmpty = useSelector(({ board }) =>
     board.every((row) => row.every((cell) => !cell.isOpen))
   );
-  let totalMines = useSelector(({ game }) => game.settings.numberOfMines);
+  let totalMines = useSelector(({ settings }) => settings.numberOfMines);
 
   if (isGameWon) return <SevenSegmentDisplay number={0} />;
   if (isEmpty) return <SevenSegmentDisplay number={totalMines} />;

@@ -17,7 +17,7 @@ function Hamburger({ onClick }: { onClick: () => void }) {
 function Settings() {
   let [isOpen, setIsOpen] = useState(false);
   let dispatch = useDispatch();
-  let { difficulty } = useSelector((state) => state.game.settings);
+  let { difficulty } = useSelector(({ settings }) => settings);
 
   return (
     <>

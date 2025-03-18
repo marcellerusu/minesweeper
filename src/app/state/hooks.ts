@@ -1,7 +1,7 @@
 import { useSelector } from "@/app/store";
 
 export function useIsGameWon() {
-  return useSelector(({ game: { board } }) =>
+  return useSelector(({ board }) =>
     board.every((row) =>
       row.every((cell) => {
         if (cell.isFlagged) {

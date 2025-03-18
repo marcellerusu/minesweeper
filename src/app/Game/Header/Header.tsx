@@ -10,7 +10,7 @@ import "./Header.css";
 
 function Header() {
   let dispatch = useDispatch();
-  let isGameLost = useSelector(({ game: { board } }) =>
+  let isGameLost = useSelector(({ board }) =>
     board.some((row) => row.some((cell) => cell.isMine && cell.isOpen))
   );
   let isGameWon = useIsGameWon();
