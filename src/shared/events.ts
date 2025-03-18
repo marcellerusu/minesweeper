@@ -1,8 +1,11 @@
 import { useEffect } from "react";
 
-export function useKeyPressed(key: string, cb: () => void) {
+export function useWindowEvent<E extends Event>(
+  kind: string,
+  cb: (e: E) => void
+) {
   useEffect(() => {
-    window.addEventListener("keypress", cb);
-    return () => window.removeEventListener("keypress", cb);
-  }, [key]);
+    window.addEventListener(kind as any, cb);
+    return () => window.removeEventListener(kind as any, cb);
+  }, []);
 }
