@@ -21,17 +21,10 @@ function Game() {
       dispatch(reset());
     }
   });
-  useWindowEvent("mousemove", (e) => {
-    let cellHtml = document
-      .elementsFromPoint(e.clientX, e.clientY)
-      .find((elem): elem is HTMLDivElement =>
-        elem.matches(".cell[data-x][data-y]")
-      );
-
-    // in case the mouse isn't on top of a cell
+  useWindowEvent("mouseover", (e) => {
+    let cellHtml = (e.target as any).closest(".cell[data-x][data-y]");
     if (!cellHtml) return;
-
-    // guaranteed to exist since the .matches(".cell[data-x][data-y]")
+    // guaranteed to exist since the .closest(".cell[data-x][data-y]")
     mouse = { x: Number(cellHtml.dataset.x), y: Number(cellHtml.dataset.y) };
   });
   return (
